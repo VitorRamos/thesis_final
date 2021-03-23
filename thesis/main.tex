@@ -1,0 +1,154 @@
+% Stanford University PhD thesis style -- modifications to the report style
+% This is unofficial so you should always double check against the
+% Registrar's office rules
+% See http://library.stanford.edu/research/bibliography-management/latex-and-bibtex
+% 
+% Example of use below
+% See the suthesis-2e.sty file for documentation
+%
+\documentclass{report}
+
+\usepackage[breakable]{tcolorbox}
+\usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+
+\usepackage{iftex}
+\ifPDFTeX
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\else
+\usepackage{fontspec}
+\fi
+
+% Basic figure setup, for now with no caption control since it's done
+% automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+\usepackage{graphicx}
+% Maintain compatibility with old templates. Remove in nbconvert 6.0
+\let\Oldincludegraphics\includegraphics
+% Ensure that by default, figures have no caption (until we provide a
+% proper Figure object with a Caption API and a way to capture that
+% in the conversion process - todo).
+\usepackage{caption}
+\DeclareCaptionFormat{nocaption}{}
+\captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+\usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+\adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+\usepackage{float}
+\floatplacement{figure}{H} % forces figures to be placed at the correct location
+\usepackage{xcolor} % Allow colors to be defined
+\usepackage{enumerate} % Needed for markdown enumerations to work
+\usepackage{geometry} % Used to adjust the document margins
+\usepackage{amsmath} % Equations
+\usepackage{amssymb} % Equations
+\usepackage{textcomp} % defines textquotesingle
+% Hack from http://tex.stackexchange.com/a/47451/13684:
+\AtBeginDocument{%
+	\def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+}
+\usepackage{upquote} % Upright quotes for verbatim code
+\usepackage{eurosym} % defines \euro
+\usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+\usepackage{fancyvrb} % verbatim replacement that allows latex
+\usepackage{grffile} % extends the file name processing of package graphics 
+% to support a larger range
+\makeatletter % fix for grffile with XeLaTeX
+\def\Gread@@xetex#1{%
+	\IfFileExists{"\Gin@base".bb}%
+	{\Gread@eps{\Gin@base.bb}}%
+	{\Gread@@xetex@aux#1}%
+}
+\makeatother
+
+% The hyperref package gives us a pdf with properly built
+% internal navigation ('pdf bookmarks' for the table of contents,
+% internal cross-reference links, web links for URLs, etc.)
+\usepackage{hyperref}
+% The default LaTeX title has an obnoxious amount of whitespace. By default,
+% titling removes some of it. It also provides customization options.
+\usepackage{titling}
+\usepackage{longtable} % longtable support required by pandoc >1.10
+\usepackage{booktabs}  % table support for pandoc > 1.12.2
+\usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+\usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+% normalem makes italics be italics, not underlines
+\usepackage{mathrsfs}
+\usepackage{outlines}
+
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{nth}
+\usepackage{todonotes}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{cleveref}
+\usepackage{listings}
+%\usepackage[caption=false,font=footnotesize]{subfig}
+%\usepackage[export]{adjustbox}
+
+\newcommand*\rot{\rotatebox{90}}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+		T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+	
+\usepackage{suthesis-2e}
+\dept{Computer Science}
+
+\begin{document}
+\title{Energy aware HPC}
+\author{Vitor Ramos Gomes da Silva}
+\principaladviser{Carlos Valderrama}
+\coprincipaladviser{Pierre MANNEBACK}
+\firstreader{Thierry DUTOIT}
+\secondreader{Sidi MAHMOUDI}
+\thirdreader{Samuel Xavier de Souza} %if needed
+ 
+\beforepreface
+\prefacesection{Preface}
+Second Phd Committee
+%\prefacesection{Acknowledgments}
+%I would like to thank...
+\afterpreface
+
+\chapter{Introduction}
+Energy consumption is a key to enable exascale High-performance Computing (HPC). Energy-optimized hardware and software combinations still could be inefficient if software operates poorly. 
+Software operation relies on dynamic scaling of frequency and voltage (DVFS) as well as dynamic power management (DPM), but none have priority information on the application, which leads to inefficient software operation. This work proposes an analytical model that can be used to estimate energy-optimal software operation. 
+This work proposes a new energy model that can be used as a basis to optimize DVFS and DPM, as well as to assess the contribution of parameters such as parallelism level and dynamic power to the energy consumption.
+Since in HPC, applications can run on multiple cores and associated frequencies, both of which can be controlled for most systems, the novelty of the model includes such parameters as well as the workload, two application parameters and three system parameters.
+\include{intro/intro}
+
+%\chapter{Approch}
+%\include{ch1/ch1}
+
+
+\chapter{Models}
+In this Section, the proposed power, performance and energy models are derived and validated
+\include{models/models}
+\include{ch5/ch5}
+
+\chapter{Optmizers}
+This chapter talks about the different types of optimizers.
+\include{ch7/ch7}
+
+\chapter{Framework}
+This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
+\include{fingerprint/fingerprint}
+\include{pascalanalyzer/pascalanalyzer}
+
+\chapter{Experiments}
+This chapter will describe all the experiments that validate the models constraints.
+\include{experiments/experiments}
+
+
+%\appendix
+%\chapter{A Long Proof}
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

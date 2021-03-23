@@ -1,0 +1,586 @@
+% Capítulo 5
+\chapter{Resultados} \label{cap:resultados}
+
+Nesta sessão serão mostrados os ajustes dos modelos e o resultado do modelo final de energia.
+
+\section{Modelo de potência}
+
+O modelo de potencia ajustado pode ser visto na Figura \ref{fig:pot_ipmi} e os parâmetros da equação em (\ref{eq:fittedpower}) com a unidade de frequência em GHz.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=8cm]{Imagens/potencia_ipmi.png}
+\caption{Ajuste Modelo de Potencia}{Onde os pontos representam os valores reais de potência medidos com o IPMI e a grade a curva obtida}
+\label{fig:pot_ipmi}
+\end{figure}
+
+\begin{equation} 
+P_{total}(f,p,s)=p(0.29f^3+0.97f)+198.59+9.18s \label{eq:fittedpower}
+\end{equation}
+
+O MEP resultante foi de 0.75\% e MEA foi de 1.89W.
+
+\section{Modelo de performance} \label{sec:ajuste_perf}
+
+Alguns resultados da caracterização podem ser vistos na Figura \ref{fig:tempos} onde é mostrada a curva obtida pela SVR e os valores reais medidos.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\columnwidth]{Imagens/time/black_3.png}
+		\caption{Tempo Blackscholes}
+	\end{subfigure}%
+	~ 
+	\begin{subfigure}[t]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\columnwidth]{Imagens/time/fluid_3.png}
+		\caption{Tempo Fluidanimate}
+	\end{subfigure}
+	\\
+	\centering
+	\begin{subfigure}[t]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\columnwidth]{Imagens/time/swap_3.png}
+		\caption{Tempo Swaptions}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[t]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\columnwidth]{Imagens/time/rtview_3.png}
+		\caption{Tempo Raytrace}
+	\end{subfigure}
+	
+	\caption{Tempo para modelo de performance}
+	\label{fig:tempos}
+\end{figure}
+
+A media dos  resultados da validação cruzada podem ser vistos na Tabela \ref{tab:svr_evaluation}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\hline
+Application  & MEA & MEP \\ \hline
+Blackscholes & 2.01  & 4.6\% \\ \hline
+Fluidanimate & 6.65  & 1.89\% \\ \hline
+Raytrace  & 3.77  & 0.87\% \\ \hline
+Swaptions & 2.29  & 2.56\% \\ \hline
+\end{tabular}
+\caption{Performance-Model's Cross validation Errors}
+\label{tab:svr_evaluation}
+\end{table}
+
+
+\section{Energia} \label{sec:ajuste_en}
+
+As Figuras \ref{fig:energia_black}, \ref{fig:energia_fluid}, \ref{fig:energia_rtview} e \ref{fig:energia_swaptions} mostram os valores de energia medidos junto com a superfície ajustada do modelo. As medições de energia foram obtidas integrando a potência ao longo do tempo total de execução da aplicação.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/black_1.png}
+        \caption{Entrada 1}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/black_2.png}
+        \caption{Entrada 2}
+    \end{subfigure}
+    \\
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/black_3.png}
+        \caption{Entrada 3}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/black_4.png}
+        \caption{Entrada 4}
+    \end{subfigure}
+    \\
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/black_5.png}
+        \caption{Entrada 5}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/black_6.png}
+        \caption{Entrada 6}
+    \end{subfigure}
+	\caption{Modelo de Energia do Blackscholes}
+	\label{fig:energia_black}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/fluid_1.png}
+        \caption{Entrada 1}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/fluid_2.png}
+        \caption{Entrada 2}
+    \end{subfigure}
+    \\
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/fluid_3.png}
+        \caption{Entrada 3}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/fluid_4.png}
+        \caption{Entrada 4}
+    \end{subfigure}
+    \\
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/fluid_5.png}
+        \caption{Entrada 5}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/fluid_6.png}
+        \caption{Entrada 6}
+    \end{subfigure}
+    
+    \caption{Modelo de Energia do Fluidanimate}
+    \label{fig:energia_fluid}
+\end{figure}
+
+O FluidAnimate possui uma restrição quanto ao número de núcleos que precisa ser potência de 2, assim não temos as mesmas variações das aplicações anteriores mas apresentou comportamento similar, sendo que o decaimento no consumo de energia foi mais gradual com o número de núcleos.
+
+Podemos observar um decaimento do tipo $\frac{1}{p}$ com o numero de núcleos ativos devido ao tempo paralelo seguir essa relação com o tempo serial $T_{paralelo} \alpha \frac{T_{serial}}{p}$, isso mostra a importância da paralelização na economia de energia.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/swap_1.png}
+        \caption{Entrada 1}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/swap_2.png}
+        \caption{Entrada 2}
+    \end{subfigure}
+    \\
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/swap_3.png}
+        \caption{Entrada 3}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/swap_4.png}
+        \caption{Entrada 4}
+    \end{subfigure}
+    \\
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/swap_5.png}
+        \caption{Entrada 5}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/swap_6.png}
+        \caption{Entrada 6}
+    \end{subfigure}
+    
+    \caption{Modelo de Energia do Swaptions}
+    \label{fig:energia_swaptions}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/rtview_1.png}
+        \caption{Entrada 1}
+	    \label{fig:energia_rtview_e1}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/rtview_2.png}
+        \caption{Entrada 2}
+        \label{fig:energia_rtview_e2}
+    \end{subfigure}
+    \\
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/rtview_3.png}
+        \caption{Entrada 3}
+        \label{fig:energia_rtview_e3}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/rtview_4.png}
+        \caption{Entrada 4}
+        \label{fig:energia_rtview_e4}
+    \end{subfigure}
+    \\
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/rtview_5.png}
+        \caption{Entrada 5}
+        \label{fig:energia_rtview_e5}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\columnwidth]{Imagens/energy/rtview_6.png}
+        \caption{Entrada 6}
+        \label{fig:energia_rtview_e6}
+    \end{subfigure}
+    
+    \caption{Modelo de Energia do RayTrace}
+    \label{fig:energia_rtview}
+\end{figure}
+
+
+Podemos perceber que a tendencia foi seguida corretamente, tendo uma maior distorção apenas nas primeiras entradas do Raytrace visto nas figuras \ref{fig:energia_rtview_e1},\ref{fig:energia_rtview_e2},\ref{fig:energia_rtview_e3}.
+
+\section{Comparação de Energia} \label{sec:comp}
+
+Para descobrir a verdadeira economia do método proposto ele foi comparando o consumo de energia das quatro aplicações de estudo de caso. Usando as configurações ótimas de energia fornecidas pela abordagem proposta com o DVFS padrão do Linux, o Ondemand e com o Intel P-state, variando o número de núcleos ativos com os valores de 1 a 32 de forma exponencial e expondo os melhores casos dos 3 métodos, para termos uma melhor ideia de comparação, são mostrados nas tabelas os valores absolutos de consumo, a frequência media e a economia com relação ao modelo proposto.
+
+\begin{table}[H]
+	\resizebox{\columnwidth}{!}{
+		\begin{tabular}{l|l|l|l|l|l|l|ll}
+			\multicolumn{1}{l|}{\rot{Entrada}} & \rot{\begin{tabular}[c]{@{}l@{}}Freq. Media \\ em GHz \\ (\#Cores) \end{tabular}}  & \rot{Energia em KJ}   &  \rot{\begin{tabular}[c]{@{}l@{}}Freq. Media \\ em GHz \\ (\#Cores) \end{tabular}} & \rot{Energia em KJ}  & \rot{\begin{tabular}[c]{@{}l@{}} Freq. \\ em GHz \\ (\#Cores) \end{tabular}} & \rot{Energia em KJ}        & \multicolumn{1}{l|}{\rot{\begin{tabular}[c]{@{}l@{}} Economia \\ Ondemand \end{tabular}}} & \multicolumn{1}{l}{\rot{\begin{tabular}[c]{@{}l@{}} Economia \\ Intel\end{tabular}}} \\ \hline
+			\multicolumn{1}{l|}{1} & 1.31 (32) & 0.66 & 1.27 (32) & 0.72 & 1.50 (32)  & 0.97 & \multicolumn{1}{l|}{-32.18} & \multicolumn{1}{l}{-25.89} \\ \hline
+			\multicolumn{1}{l|}{2} & 1.20 (32) & 2.18 & 2.80 (32) & 1.67 & 2.10 (28)  & 1.67 & \multicolumn{1}{l|}{30.68} & \multicolumn{1}{l}{0.19} \\ \hline
+			\multicolumn{1}{l|}{3} & 2.33 (32) & 3.22 & 2.09 (32) & 3.53 & 2.20 (32)  & 2.97 & \multicolumn{1}{l|}{8.40} & \multicolumn{1}{l}{18.66} \\ \hline
+			\multicolumn{1}{l|}{4} & 1.42 (32) & 7.44 & 2.00 (32) & 6.46 & 2.20 (28)  & 6.52 & \multicolumn{1}{l|}{14.11} & \multicolumn{1}{l}{-0.84} \\ \hline
+			\multicolumn{1}{l|}{5} & 1.20 (32) & 15.40 & 2.42 (32) & 12.57 & 2.20 (28)  & 13.33 & \multicolumn{1}{l|}{15.48} & \multicolumn{1}{l}{-5.69} \\ \hline
+			\multicolumn{1}{l|}{6} & 1.54 (32) & 26.98 & 1.77 (32) & 26.48 & 2.20 (30)  & 25.73 & \multicolumn{1}{l|}{4.85} & \multicolumn{1}{l}{2.89} \\ \hline
+			& \multicolumn{2}{l|}{Ondemand Min.} & \multicolumn{2}{l|}{Intel Min.} & \multicolumn{2}{l|}{Proposta} & Economia em \% & \\ 
+		\end{tabular}
+	}
+	\caption{Comparação energia miníma Blackscholes}{Comparação do método proposto com Ondemand e P-state, mostrando a porcentagem de economia com relação aos melhores valores encontrados, onde positivo significa economia.}
+	\label{tab:Blackscholesfreq}
+\end{table}
+
+Na Tabela \ref{tab:Blackscholesfreq} podemos ver que na maioria das vezes foi obtida configurações que consumiu menos energia, chegando a economia de até 30\%. Apenas para a primeira entrada onde tem o menor tempo de execução a configuração proposta não compensou. A número de núcleos ativos na melhor configuração sempre foi próximo do máximo, ou seja, 32, mesmo que a aplicação não tenha um decaimento no tempo significativo com o aumento no número de núcleos, isso confirma a importância da paralelização nas aplicações para se obter economia de energia. Outra observação importante e que nem sempre a menor frequência levou ao menor consumo de energia, como podemos ver pelo Ondemand que em para todas as entradas teve um média de frequência menor e foi o que consumiu mais energia dos 3 métodos comparados.
+
+\begin{table}[H]
+	\resizebox{\columnwidth}{!}{
+		\begin{tabular}{l|l|l|l|l|l|l|ll}
+			\multicolumn{1}{l|}{\rot{Entrada}} & \rot{\begin{tabular}[c]{@{}l@{}}Freq. Media \\ em GHz \\ (\#Cores) \end{tabular}}  & \rot{Energia em KJ}   &  \rot{\begin{tabular}[c]{@{}l@{}}Freq. Media \\ em GHz \\ (\#Cores) \end{tabular}} & \rot{Energia em KJ}  & \rot{\begin{tabular}[c]{@{}l@{}} Freq. \\ em GHz \\ (\#Cores) \end{tabular}} & \rot{Energia em KJ}        & \multicolumn{1}{l|}{\rot{\begin{tabular}[c]{@{}l@{}} Economia \\ Ondemand \end{tabular}}} & \multicolumn{1}{l}{\rot{\begin{tabular}[c]{@{}l@{}} Economia \\ Intel\end{tabular}}} \\ \hline
+			\multicolumn{1}{l|}{1} & 2.15 (32) & 2.28 & 2.61 (32) & 2.61 & 2.10 (32)  & 2.35 & \multicolumn{1}{l|}{-3.03} & \multicolumn{1}{l}{11.05} \\ \hline
+			\multicolumn{1}{l|}{2} & 2.01 (32) & 4.36 & 1.74 (32) & 5.13 & 2.00 (32)  & 4.15 & \multicolumn{1}{l|}{5.00} & \multicolumn{1}{l}{23.71} \\ \hline
+			\multicolumn{1}{l|}{3} & 1.68 (32) & 9.00 & 2.22 (32) & 10.01 & 2.00 (32)  & 7.89 & \multicolumn{1}{l|}{14.13} & \multicolumn{1}{l}{26.93} \\ \hline
+			\multicolumn{1}{l|}{4} & 1.93 (32) & 16.87 & 2.51 (32) & 18.69 & 2.00 (32)  & 16.98 & \multicolumn{1}{l|}{-0.63} & \multicolumn{1}{l}{10.09} \\ \hline
+			\multicolumn{1}{l|}{5} & 1.98 (32) & 33.29 & 2.63 (32) & 37.68 & 2.10 (32)  & 33.20 & \multicolumn{1}{l|}{0.26} & \multicolumn{1}{l}{13.47} \\ \hline
+			\multicolumn{1}{l|}{6} & 1.43 (32) & 68.43 & 2.54 (32) & 77.30 & 2.10 (32)  & 66.67 & \multicolumn{1}{l|}{2.65} & \multicolumn{1}{l}{15.95} \\ \hline
+			& \multicolumn{2}{l|}{Ondemand Min.} & \multicolumn{2}{l|}{Intel Min.} & \multicolumn{2}{l|}{Proposta} & Economia em \% & \\ 
+		\end{tabular}
+	}
+	\caption{Comparação energia miníma Fluidanimate}{Comparação do método proposto com Ondemand e P-state, mostrando a porcentagem de economia com relação aos melhores valores encontrados, onde positivo significa economia.}
+	\label{tab:Fluidanimatefreq}
+\end{table}
+
+A comparação do Fluidanimate visto na Tabela \ref{tab:Fluidanimatefreq} foi o que apresentou melhor resultado tendo economia em todos as entradas comparado ao P-state e na maioria contra o Ondemand. A frequência do Ondemand e método proposto foram bem próximas e mesmo assim foi obtido economia isso pode ser explicado pela variação de frequência que existe no Ondemand levando a um maior tempo de execução.
+
+\begin{table}[H]
+	\resizebox{\columnwidth}{!}{
+		\begin{tabular}{l|l|l|l|l|l|l|ll}
+			\multicolumn{1}{l|}{\rot{Entrada}} & \rot{\begin{tabular}[c]{@{}l@{}}Freq. Media \\ em GHz \\ (\#Cores) \end{tabular}}  & \rot{Energia em KJ}   &  \rot{\begin{tabular}[c]{@{}l@{}}Freq. Media \\ em GHz \\ (\#Cores) \end{tabular}} & \rot{Energia em KJ}  & \rot{\begin{tabular}[c]{@{}l@{}} Freq. \\ em GHz \\ (\#Cores) \end{tabular}} & \rot{Energia em KJ}        & \multicolumn{1}{l|}{\rot{\begin{tabular}[c]{@{}l@{}} Economia \\ Ondemand \end{tabular}}} & \multicolumn{1}{l}{\rot{\begin{tabular}[c]{@{}l@{}} Economia \\ Intel\end{tabular}}} \\ \hline
+			\multicolumn{1}{l|}{1} & 2.77 (32) & 4.11 & 2.77 (32) & 4.14 & 1.80 (32)  & 4.52 & \multicolumn{1}{l|}{-9.00} & \multicolumn{1}{l}{-8.49} \\ \hline
+			\multicolumn{1}{l|}{2} & 2.77 (32) & 6.37 & 2.76 (32) & 6.30 & 2.20 (32)  & 5.73 & \multicolumn{1}{l|}{11.18} & \multicolumn{1}{l}{10.01} \\ \hline
+			\multicolumn{1}{l|}{3} & 2.77 (32) & 8.49 & 2.76 (32) & 8.51 & 2.20 (32)  & 7.81 & \multicolumn{1}{l|}{8.73} & \multicolumn{1}{l}{8.91} \\ \hline
+			\multicolumn{1}{l|}{4} & 2.58 (32) & 10.59 & 2.71 (32) & 10.61 & 2.00 (32)  & 9.90 & \multicolumn{1}{l|}{6.92} & \multicolumn{1}{l}{7.14} \\ \hline
+			\multicolumn{1}{l|}{5} & 2.57 (32) & 12.68 & 2.60 (32) & 12.68 & 2.10 (32)  & 12.01 & \multicolumn{1}{l|}{5.63} & \multicolumn{1}{l}{5.62} \\ \hline
+			\multicolumn{1}{l|}{6} & 2.15 (32) & 14.86 & 2.30 (32) & 14.78 & 1.90 (32)  & 14.45 & \multicolumn{1}{l|}{2.86} & \multicolumn{1}{l}{2.29} \\ \hline
+			& \multicolumn{2}{l|}{Ondemand Min.} & \multicolumn{2}{l|}{Intel Min.} & \multicolumn{2}{l|}{Proposta} & Economia em \% & \\ 
+		\end{tabular}
+	}
+	\caption{Comparação energia miníma Swaptions}{Comparação do método proposto com Ondemand e P-state, mostrando a porcentagem de economia com relação aos melhores valores encontrados, onde positivo significa economia.}
+	\label{tab:Swaptionsfreq}
+\end{table}
+
+As configurações ótimas para a aplicação Swaptions mostram resultados de economia similares as aplicações mostradas anteriormente, como visto na Tabela \ref{tab:Swaptionsfreq} podemos ver que na maioria das vezes também foi obtida configurações que consumiu menos energia, e apenas para a primeira entrada a configuração proposta não compensou. Nessa aplicação as frequências médias do Ondemand e P-state foram bem maiores do que o método proposto diferente da aplicação anterior, mesmo assim em ambas as aplicações houve economia de energia no método proposto isso mostra que cada aplicação tem suas configurações ideais não tendo uma configuração que economize em todas.
+
+\begin{table}[H]
+	\resizebox{\columnwidth}{!}{
+		\begin{tabular}{l|l|l|l|l|l|l|ll}
+			\multicolumn{1}{l|}{\rot{Entrada}} & \rot{\begin{tabular}[c]{@{}l@{}}Freq. Media \\ em GHz \\ (\#Cores) \end{tabular}}  & \rot{Energia em KJ}   &  \rot{\begin{tabular}[c]{@{}l@{}}Freq. Media \\ em GHz \\ (\#Cores) \end{tabular}} & \rot{Energia em KJ}  & \rot{\begin{tabular}[c]{@{}l@{}} Freq. \\ em GHz \\ (\#Cores) \end{tabular}} & \rot{Energia em KJ}        & \multicolumn{1}{l|}{\rot{\begin{tabular}[c]{@{}l@{}} Economia \\ Ondemand \end{tabular}}} & \multicolumn{1}{l}{\rot{\begin{tabular}[c]{@{}l@{}} Economia \\ Intel\end{tabular}}} \\ \hline
+			\multicolumn{1}{l|}{1} & 1.45 (8) & 32.62 & 3.60 (2) & 31.47 & 2.20 (4)  & 34.37 & \multicolumn{1}{l|}{-5.08} & \multicolumn{1}{l}{-8.43} \\ \hline
+			\multicolumn{1}{l|}{2} & 1.54 (16) & 37.06 & 1.78 (16) & 34.39 & 2.20 (6)  & 37.92 & \multicolumn{1}{l|}{-2.26} & \multicolumn{1}{l}{-9.31} \\ \hline
+			\multicolumn{1}{l|}{3} & 1.85 (8) & 41.53 & 1.33 (8) & 39.65 & 2.20 (10)  & 39.93 & \multicolumn{1}{l|}{3.99} & \multicolumn{1}{l}{-0.72} \\ \hline
+			\multicolumn{1}{l|}{4} & 1.88 (16) & 47.04 & 2.24 (16) & 44.44 & 2.20 (14)  & 45.77 & \multicolumn{1}{l|}{2.78} & \multicolumn{1}{l}{-2.91} \\ \hline
+			\multicolumn{1}{l|}{5} & 1.68 (32) & 51.88 & 2.42 (32) & 50.34 & 2.20 (22)  & 52.99 & \multicolumn{1}{l|}{-2.09} & \multicolumn{1}{l}{-5.00} \\ \hline
+			\multicolumn{1}{l|}{6} & 2.06 (32) & 65.02 & 2.78 (32) & 65.84 & 2.20 (26)  & 67.28 & \multicolumn{1}{l|}{-3.36} & \multicolumn{1}{l}{-2.14} \\ \hline
+			& \multicolumn{2}{l|}{Ondemand Min.} & \multicolumn{2}{l|}{Intel Min.} & \multicolumn{2}{l|}{Proposta} & Economia em \% & \\ 
+		\end{tabular}
+	}
+	\caption{Comparação energia miníma Raytrace}{Comparação do método proposto com Ondemand e P-state, mostrando a porcentagem de economia com relação aos melhores valores encontrados, onde positivo significa economia.}
+	\label{tab:Raytracefreq}
+\end{table}
+
+O Raytrace foi o que obteve pior resultado, como pode ser visto na Tabela \ref{tab:Raytracefreq} não existiu economia quando comparado ao P-state e em poucas entradas para o Ondemand. Uma característica desta aplicação é que diferente das outras e que o sua carga do processador inicialmente é bem baixa e posteriormente vai para 100 \% aplicações com esse perfil mostraram não ter bons resultados com esse método, enquanto que aplicações com alta variação na carga do processador como o FluidAnimate apresentam ótimos resultados.
+
+Para termos uma ideia da economia geral as Figuras \ref{fig:comp_black},\ref{fig:comp_swap},\ref{fig:comp_raytrace} e \ref{fig:comp_fluid} mostram o consumo de energia em porcentagem relativo ao proposto agora mostrando todas as variações, representando os melhores e os piores casos de consumo de energia, bem como a média geral.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{Imagens/comp/relative_black_ondemand.png}
+		\caption{Ondemand}
+	\end{subfigure}%
+	\\
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{Imagens/comp/relative_black_intel.png}
+		\caption{Intel P-state}
+	\end{subfigure}%
+	\caption{Comparação relativa de energia do Blackscholes}{Comparação mostrando o consumo de energia relativa ao modelo proposto para todas as variações de núcleos.}
+	\label{fig:comp_black}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{Imagens/comp/relative_fluid_ondemand.png}
+		\caption{Ondemand}
+	\end{subfigure}%
+	\\
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{Imagens/comp/relative_raytrace_intel.png}
+		\caption{Intel P-state}
+	\end{subfigure}%
+	\caption{Comparação relativa de energia FluidAnimate}{Comparação mostrando o consumo de energia relativa ao modelo proposto para todas as variações de núcleos.}
+	\label{fig:comp_fluid}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{Imagens/comp/relative_swap_ondemand.png}
+		\caption{Ondemand}
+	\end{subfigure}%
+	\\
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{Imagens/comp/relative_swap_intel.png}
+		\caption{Intel P-state}
+	\end{subfigure}%
+	\caption{Comparação relativa de energia Swaptions}{Comparação mostrando o consumo de energia relativa ao modelo proposto para todas as variações de núcleos.}
+	\label{fig:comp_swap}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{Imagens/comp/relative_raytrace_ondemand.png}
+		\caption{Ondemand}
+	\end{subfigure}%
+	\\
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{Imagens/comp/relative_raytrace_intel.png}
+		\caption{Intel P-state}
+	\end{subfigure}%
+	\caption{Comparação relativa de energia Raytrace}{Comparação mostrando o consumo de energia relativa ao modelo proposto para todas as variações de núcleos.}
+	\label{fig:comp_raytrace}
+\end{figure}
+
+
+Em geral, o consumo de energia dos esquemas padrões de DFVS, P-state e Ondemand, foi maior para números menores de núcleos isso mostra que a paralelização também é um fator importante para o consumo de energia. No entanto, nem sempre foi o caso de o melhor número de núcleos para este esquema ser o máximo, ou seja, 32 núcleos. Possivelmente, para arquiteturas com maior número de núcleos, a escolha do número exato que minimiza o consumo de energia seja menos evidente.
+
+Em todos os casos, o método proposto superou o pior caso dos esquemas padrões, chegando a consumir 14 vezes menos, de acordo com o que pode ser observado na Figura \ref{fig:comp_swap} entrada 2. Já considerando os melhores casos apresentados nas tabelas, na maioria das vezes foi atingido economia chegando a até 30.68\% em \ref{tab:Blackscholesfreq} na entrada 2.
+
+As Figuras \ref{fig:comp_black32},\ref{fig:comp_swap32},\ref{fig:comp_raytrace32} e \ref{fig:comp_fluid32} mostram a energia consumida em joules para cada entrada comparando a configuração proposta com o Ondemand e o P-state no seu estado padrão, isto é, com todos os núcleos ativos.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Imagens/comp/relative_black_side_by_size_energia.png}
+	\caption{Comparação Blackscholes}
+	\label{fig:comp_black32}
+\end{figure}%
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Imagens/comp/relative_fluid_side_by_size_energia.png}
+	\caption{Comparação com 32 núcleos ativos para o FluidAnimate}
+	\label{fig:comp_fluid32}
+\end{figure}%
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Imagens/comp/relative_swap_side_by_size_energia.png}
+	\caption{Comparação com 32 núcleos ativos para o Swpations}
+	\label{fig:comp_swap32}
+\end{figure}%
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Imagens/comp/relative_raytrace_side_by_size_energia.png}
+	\caption{Comparação com 32 núcleos ativos para o Raytrace}
+	\label{fig:comp_raytrace32}
+\end{figure}%
+
+
+
+É possível observar que na maioria dos casos a proposta apresentada obteve melhores resultados no estado padrão do Ondemand e P-state, para melhor concluir a tabela \ref{tab:dif_energia} é um resumo dos gráficos acima onde pode ser observada a diferença do somatório do consumo em todas as aplicações entre o modelo proposto e os já estabelecidos. Na média geral este método obteve 5.7\% de economia de energia.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c|c|c|c|c|}
+		%\cline{2-5}
+		& Kj              & \%          & Kj            & \%         \\ \hline
+		\multicolumn{1}{c|}{blackscholes} & 4682.96         & 9.15        & 237.06        & 0.46       \\ \hline
+		\multicolumn{1}{c|}{swaptions}    & 2689.88         & 4.94        & 2599.10       & 4.78       \\ \hline
+		\multicolumn{1}{c|}{raytrace}     & 13863.12        & 4.98        & 3624.61       & 1.30       \\ \hline
+		\multicolumn{1}{c|}{fluidanimate} & 2997.39         & 2.28        & 20188.61      & 15.38      \\ \hline
+		& \multicolumn{2}{c|}{Ondemand} & \multicolumn{2}{c|}{Intel} \\% \cline{2-5} 
+	\end{tabular}
+	\caption{Diferença total energia}
+	\label{tab:dif_energia}
+\end{table}
+
+\subsection{Comparação de Desempenho}
+
+No DVFS existe uma troca entre economia e desempenho, por isso também foram analisando os efeitos que a execução com a configuração do modelo proposto teve no tempo de execução das aplicações. As figuras \ref{fig:tempo_black}, \ref{fig:tempo_fluid}, \ref{fig:tempo_raytrace} e \ref{fig:tempo_swap} mostram os tempos de execução para P-state, Ondemand e modelo proposto.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Imagens/comp/relative_black_side_by_size_tempo.png}
+	\caption{Comparação de tempo para o Blackscholes}
+	\label{fig:tempo_black}
+\end{figure}%
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Imagens/comp/relative_fluid_side_by_size_tempo.png}
+	\caption{Tempo FluidAnimate}
+	\label{fig:tempo_fluid}
+\end{figure}%
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Imagens/comp/relative_swap_side_by_size_tempo.png}
+	\caption{Comparação de tempo para o Swpations}
+	\label{fig:tempo_swap}
+\end{figure}%
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Imagens/comp/relative_raytrace_side_by_size_tempo.png}
+	\caption{Comparação de tempo para o Raytrace}
+	\label{fig:tempo_raytrace}
+\end{figure}%
+
+
+
+\begin{table}[H]
+	\label{tab:med_tempo}
+	\begin{tabular}{c|c|c|c|c|}
+		%\cline{2-5}
+		& s             & \%            & s            & \%          \\ \hline
+		\multicolumn{1}{c|}{blackscholes} & -12.82        & -7.90         & -36.75       & -22.66      \\ \hline
+		\multicolumn{1}{c|}{swaptions}    & -41.38        & -24.96        & -41.75       & -25.18      \\ \hline
+		\multicolumn{1}{c|}{raytrace}     & 41.05         & 3.78          & -161.67      & -14.90      \\ \hline
+		\multicolumn{1}{c|}{fluidanimate} & 13.34         & 3.30          & -29.99       & -7.41       \\ \hline
+		\multicolumn{1}{l|}{}              & \multicolumn{2}{c|}{Ondemand} & \multicolumn{2}{c|}{Intel} \\ %\cline{2-5} 
+	\end{tabular}
+	\centering
+	\caption{Diferença total tempo}
+\end{table}
+
+Podemos ver que o desempenho foi pior para o modelo proposto, sendo esperado pois no geral foi obtido economia de energia. Também podemos confirmar que o FluidAnimate teve um maior tempo de execução no Ondemand mesmo executando a uma frequência próxima a da configuração proposta e isso levou a um maior consumo de energia como mostrado anteriormente.
+
+\section{Energia utilizada no treinamento}
+
+Como o objetivo é economizar energia e a etapa de treinamento requer um consumo considerável, foi estudada a redução do gasto reduzindo o número de amostras utilizadas no treinamento. As imagens \ref{fig:over_black}, \ref{fig:over_swap}, \ref{fig:over_raytrace} e \ref{fig:over_fluid} mostram o consumo de energia pelo número de amostras, junto com o EMP.
+
+O numero de amostras foram escolhidas de forma que os pontos da borda são sempre selecionados, ou seja, para o maior e menor número de núcleos todas as frequências são utilizadas no treinamento, da mesma forma para maior e menor frequência, todas as núcleos são utilizadas, o restante dos pontos são escolhidos de forma aleatória. Essa estratégia se mostrou mais eficaz do que escolher todos os pontos de forma aleatória.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{Imagens/overhead/energy_Blackscholes.png}
+		\caption{Energia}
+	\end{subfigure}\hspace{0.04\textwidth}%
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{Imagens/overhead/error_Blackscholes.png}
+		\caption{Erro}
+	\end{subfigure}%
+	\caption{Energia utilizada no treinamento para o Blackscholes}
+	\label{fig:over_black}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{Imagens/overhead/energy_Fluidanimate.png}
+		\caption{Energia}
+	\end{subfigure}\hspace{0.04\textwidth}%
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{Imagens/overhead/error_Fluidanimate.png}
+		\caption{Erro}
+	\end{subfigure}%
+	\caption{Energia utilizada no treinamento para o FluidAnimte}
+	\label{fig:over_fluid}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{Imagens/overhead/energy_Swaptions.png}
+		\caption{Energia}
+	\end{subfigure}\hspace{0.04\textwidth}%
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{Imagens/overhead/error_Swaptions.png}
+		\caption{Erro}
+	\end{subfigure}%
+	\caption{Energia utilizada no treinamento para o Swaptions}
+	\label{fig:over_swap}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{Imagens/overhead/energy_Raytrace.png}
+		\caption{Energia}
+	\end{subfigure}\hspace{0.04\textwidth}%
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{Imagens/overhead/error_Raytrace.png}
+		\caption{Erro}
+	\end{subfigure}%
+	\caption{Energia utilizada no treinamento para o Raytrace}
+	\label{fig:over_raytrace}
+\end{figure}
+
+
+Para as aplicações Blackscholes, Swaptions e Raytrace, o erro começa a ser aceitável, próximo de 5\%, a partir de 400 amostras, e para o FluidAnimate que possui menos amostras, devido ao número de núcleos ser necessariamente potência de 2, teve erro aceitável com mais de 200 amostras. Com isso temos em média o consumo de 20 Mega Joules comparado com 50 Mega Joules utilizando todos os pontos. Apesar da redução de mais de 50\% o consumo de energia ainda é muito grande no treinamento. Levando em conta o consumo médio mostrado na tabela \ref{tab:dif_energia}, seria necessário rodar as aplicações mais de 4000 vezes para compensarmos a energia utilizada no treinamento. Uma possível solução para este problema seria utilizar um modelo matemático para o desempenho, com isso o número de amostras para ajustar o modelo cairia drasticamente, deixando ele bastante viável.

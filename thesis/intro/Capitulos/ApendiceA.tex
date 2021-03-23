@@ -1,0 +1,75 @@
+% Apêndice
+\apendice
+\chapter{Primeiro apêndice}
+
+\section{Controle de frequência}
+
+O controle de frequência foi feito utilizando o driver  acpi-cpufreq com o governador userspace. O numero de cores ativos foi alterando modificando os arquivos apropriados nos sistemas de arquivos virtuais do Linux. Na prática, essa abordagem pode ser trazida à produção, permitindo que o gerente de recursos execute essas alterações para o usuário usando scripts pré e pós para envios de tarefas com requisitos de consumo de energia. E para as medições de energia foram utilizados tanto IPMI como RAPL.
+
+Os passos seguidos para isso foram:
+
+\begin{enumerate}
+	
+	\item Ativar o controle por hardware na BIOS do sistema utilizando IPMI
+	
+	\item Desativar o driver do fabricante (Intel p-state) passando um parâmetro na linha de inicialização do sistema operacional (boot), isso pode ser feito adicionando o comando GRUB\_CMDLINE\_LINUX\_DEFAULT="intel\_pstate=disable"  no arquivo de configuração do grub que é o gerenciador de inicialização "/boot/grub/grub.conf".
+	
+	\item Retirar cpufreq da lista negra de drivers, em alguns sistemas o cpufreq está na lista negra para evitar conflito com outros drivers que gerenciam a frequência. Os drivers da lista negra podem ser encontrados em "/etc/modprobe.d"  para retirar basta remover o arquivo com o nome do driver.
+	
+	\item Carregar o driver cpufreq, como ele é um módulo podemos utilizar o comando "modprobe acpi-cpufreq" que carrega um módulo no kernel em tempo de execução.
+	
+	\item Carregar governadores para cpufreq. Dependendo do sistema nem todos os governadores são carregados precisando serem carregados manualmente. Os governadores disponíveis podem ser encontrados no diretório "/lib/modules/\$(uname -r)/kernel/drivers/cpufreq" e para carregá-los pode ser utilizado o comando "modprobe cpufreq\_governor".
+	
+\end{enumerate}
+
+Uma vez o modulo acpi-cpufreq carregado, a alteração de frequência é feita através da interface de arquivos de sistema (sysfs). No diretório
+
+$"/sys/devices/system/cpu/cpu*/cpufreq/"$
+
+encontramos diversos arquivos de controle que comandam diferentes funcionalidades como:
+
+\begin{itemize}
+	\item scaling\_governor : Governador atual
+	\item scaling\_available\_governors : Lista governadores disponiveis
+	\item scaling\_available\_frequencies: Lista frequências disponiveis
+	\item scaling\_max\_freq : Configura maior frequência que pode ser utilizada
+	\item scaling\_min\_freq : Configura menor frequência que pode ser utilizada
+	\item scaling\_setspeed : Configura frequência para governador userspace 
+	\item scaling\_cur\_freq : Frequência que o sistema escolheu
+	\item cpuinfo\_cur\_freq : Frequência real do sistema
+\end{itemize}
+
+Estas variáveis pode ser especificadas para cada núcleo do processador podendo ter diferentes configurações por núcleo. 
+
+Para ativar e desativar os núcleos do processador existe o arquivo de controle
+
+$"/sys/devices/system/cpu/cpu*/online".$
+
+\section{Monitoramento}
+
+\subsection{IPMI}
+Para fazer o monitoramento com IPMI também foi desenvolvido um módulo python que acessa a interface web do IPMI faz as requisições de dados necessárias e decodifica esses dados.
+
+O primeiro passo foi analisar a comunicação do interface web com o navegador para extrair as requisições necessárias para obter os dados. Primeiramente foi feita requisições manuais do protocolo HTTP, mas o site utiliza de vários javascripts para compor sua interface dificulta análise. Como no sistema utilizado o único acesso é por Secure Shell (ssh) onde tudo é feito pelo terminal de comando, foi feito um tunelamento para redirecionar o conteúdo para outro computador que possui uma interface gráfica.
+
+$ssh -fN -L 8080:service3-bmc:80 admin$
+
+Neste comando todo o tráfego da porta 8080 no localhost será redirecionado para o service3-bmc na porta 80 ( endereço e porta do IPMI web service).
+
+Utilizado o navegador para acessando a interface e as ferramentas de desenvolvedor para analisar o comunicação com site. Foram acessadas as informações de interesse, e foi observado requisições de arquivo XML contendo as informações de consumo de potência. Sabendo qual a requisição necessária o próximo passo foi decodificar os dados do arquivo. Para isso foi feita uma análise do javascript utilizado no site.
+
+
+\subsection{RAPL}
+Para utilizar o RAPL é preciso carregar o module msr  isso pode ser feito utilizando o comando "modprobe msr"
+
+Existem três maneira de ler os valores do RAPL:
+
+Os registradores MSRs podem ser acessados pelo sistema operacional, como o módulo do kernel msr no Linux. Para ler os valores de energia podem ser utilizada a interface do próprio sistema disponível em
+
+$/sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj$ 
+ 
+Ou lendo um registrador especifico através do próprio dispositivo em $/dev/msr$.
+Além de fornecer informação de energia existem diversas dados sobre parâmetros de performance, por exemplo, acerto de cache, frequência do processador e instruções de branch. Também é possível especificar o limites de potencia.
+
+
+Todos os códigos utilizados neste trabalho podem ser encontrados no github neste link \url{https://github.com/Teste899/SC18}.

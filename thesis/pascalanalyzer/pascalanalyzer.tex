@@ -1,0 +1,481 @@
+\section{Pascal Analyzer}
+
+Run application collecting information while executing a program with
+different configurations of cores, frequencies, inputs arguments.
+
+\subsection{Architecture}
+\begin{figure}
+	\includegraphics{pascalanalyzer/arch2}
+\end{figure}
+\subsection{Modules description}
+PascalRun: Provie a monitor class to collect information while executing  a program 
+with different configurations of cores, frequencies, inputs arguments. The information collected can be via sensor specified by the user,  instrumented regions (source code and openmp binaries) and the entire  program execution time. The data is stored and processed with PascalData  module that can resume all on a DataArray (xArray module) with times, speedups or efficiency.
+
+PascalData: Load saved data from pascalrun and can convert and process to varius formats.
+
+PascalModel: Create AI and Analytical models from pascal data
+
+Instrumenter: Instrument source code creating marks at parallel regions
+
+libinst: Instrument binary code creating marks at parallel regions
+
+cpufreq: resposible of CPU control
+
+IPMI, RAPL, RAPL\_sample, ProcList: Sensors
+
+\subsection{Features}
+
+\subsubsection{Options}
+\begin{outline}
+	\1 list of cores
+	\1 list of frequencies
+	\1 list of inputs
+	\1 list of sensors
+		\2 ipmi
+		\2 rapl (sysfs)
+		\2 rapl (perf)
+		\2 process cores monitor
+	\1 number of repetitions
+	\1 choice of CPU governor
+	\1 idle time between task
+	\1 enable/disable hyperthread
+	\1 enable/disable cores
+	\1 collect times from marks manually inserted by the user in the source code
+	\1 collect times from parallel regions using binary instrumentation (openmp)
+	\1 list of sensors
+	\1 instrument source code
+	\1 output file name
+	\1 verbosity level
+		\2 0 nothing
+		\2 1 only display run configuration
+		\2 2 display run configuration and sensors data
+		\2 3 display everything
+\end{outline}
+
+\subsubsection{Execution}
+
+Examples execution using command line
+\begin{lstlisting}
+pascalanalyzer ./myapp --bin --idle_time 5 --cores 1,4  
+		--frequencies 3000000,2800000 --verbosity 3
+
+pascalanalyzer ./myapp -c 1,32 -v 2 -o myoutput.json
+\end{lstlisting}
+
+Example execution python
+\begin{lstlisting}
+from pascalanalyzer.pascalrun import PascalRun
+from pascalanalyzer.sensors.rapl import RAPL
+rapl_sensor = RAPL()
+
+app = PascalRun(
+	application="myapp",
+	repetitions=5,
+	sensors=[rapl_sensor],
+	idle_time=30,
+	governor="userspace",
+	disable_cores=True,
+	disable_hyperthread=True,
+)
+app.run(
+	cores=[1,16,32],
+	frequencies=[3000000,2800000],
+	inputs=[["arg1,"arg2"], ["arg3,"arg4"]]
+)
+app.save("output_file")
+\end{lstlisting}
+
+Example model creating python
+\begin{lstlisting}
+from pascalanalyzer import PascalData
+from pascalanalyzer.pascalmodel import *
+
+data = PascalData(filename)
+df = data.energy()
+
+opt = LeastSquaresOptmizer("model= lambda x, N, p, f:"
+                           "x[0]*f**2*p+x[1]/(f*p)*N**x[7]+x[2]*f**2"
+                           "+x[3]*p+x[4]/f*N**x[6]+x[5]", 8)
+
+pascalmodel= create_model(df,inputs=["input","cores","frequency"],
+                             output=["ipmi_energy"], model= opt,
+                             config=data.config, train_sz=0.9)
+\end{lstlisting}
+
+\subsection{Data structure}
+
+\subsubsection{Proposals}
+\subsubsection{neasted dictonaries}
+\begin{lstlisting}
+{
+	key1:
+	{
+		key2:
+		{
+			key3:
+			{
+				data1: val1,
+				data2: val2
+			},
+			...
+		},
+		...
+	},
+	...
+}
+...
+\end{lstlisting}
+
+\subsubsection{index dictonary}
+\begin{lstlisting}
+{
+"key1;key2;key3;...": [
+	{
+		data1: val1,
+		data2: val2
+	},
+	...
+],
+}
+...
+\end{lstlisting}
+
+\subsubsection{Benchmarking}
+
+
+{\centering
+
+Keys: [16,10,5,3,10] 24.00 Kb  Data bytes: 10.00 b 
+	
+\begin{tabular}{llllr}
+	\toprule
+	{} & Storage &    Neasted &      Index &  Neasted/Index \\
+	\midrule
+	0 &     RAM &    2.57 Mb &    4.73 Mb &       0.542656 \\
+	1 &   JSON  &  616.52 Kb &    1.26 Mb &       0.490468 \\
+	2 &     PKL &  380.99 Kb &    1.21 Mb &       0.315070 \\
+	3 &      GZ &  221.96 Kb &  270.36 Kb &       0.820989 \\
+	\bottomrule
+\end{tabular}
+
+
+Keys: [16,10,5,3,10] 24.00 Kb  Data bytes: 100.00 b 
+
+\begin{tabular}{llllr}
+	\toprule
+	{} & Storage &  Neasted &    Index &  Neasted/Index \\
+	\midrule
+	0 &     RAM &  4.73 Mb &  6.89 Mb &       0.686078 \\
+	1 &   JSON  &  2.78 Mb &  3.42 Mb &       0.812560 \\
+	2 &     PKL &  2.54 Mb &  3.37 Mb &       0.754198 \\
+	3 &      GZ &  1.82 Mb &  1.87 Mb &       0.968731 \\
+	\bottomrule
+\end{tabular}
+
+
+Keys: [16,10,5,3,10] 24.00 Kb  Data bytes: 1.00 Kb 
+
+\begin{tabular}{llllr}
+	\toprule
+	{} & Storage &   Neasted &     Index &  Neasted/Index \\
+	\midrule
+	0 &     RAM &  26.33 Mb &  28.49 Mb &       0.924100 \\
+	1 &   JSON  &  24.38 Mb &  25.02 Mb &       0.974398 \\
+	2 &     PKL &  24.22 Mb &  25.04 Mb &       0.966930 \\
+	3 &      GZ &  17.58 Mb &  17.64 Mb &       0.996294 \\
+	\bottomrule
+\end{tabular}
+
+
+Keys: [16,10,5,3,10] 24.00 Kb  Data bytes: 10.00 Kb 
+
+\begin{tabular}{llllr}
+	\toprule
+	{} & Storage &    Neasted &      Index &  Neasted/Index \\
+	\midrule
+	0 &     RAM &  242.33 Mb &  244.49 Mb &       0.991156 \\
+	1 &   JSON  &  240.38 Mb &  241.02 Mb &       0.997343 \\
+	2 &     PKL &  240.24 Mb &  241.07 Mb &       0.996565 \\
+	3 &      GZ &  175.11 Mb &  175.07 Mb &       1.000198 \\
+	\bottomrule
+\end{tabular}
+
+
+Keys: [32,10,10,10,10] 320.00 Kb  Data bytes: 1.00 b 
+
+\begin{tabular}{llllr}
+	\toprule
+	{} & Storage &    Neasted &     Index &  Neasted/Index \\
+	\midrule
+	0 &     RAM &   13.38 Mb &  37.27 Mb &       0.358895 \\
+	1 &   JSON  &    5.23 Mb &  13.98 Mb &       0.373866 \\
+	2 &     PKL &    1.49 Mb &  12.70 Mb &       0.117686 \\
+	3 &      GZ &  537.08 Kb &   1.24 Mb &       0.431880 \\
+	\bottomrule
+\end{tabular}
+
+Keys: [16,10,5,3,10] 24.00 Kb  Data bytes: 10.00 b 
+
+\begin{tabular}{llrr}
+	\toprule
+	{} &      Time &   Neasted &  Index \\
+	\midrule
+	0 &  Creation &  0.073802 &    0.0 \\
+	1 &     Acess &  0.000000 &    0.0 \\
+	\bottomrule
+\end{tabular}
+
+
+Keys: [16,10,5,3,10] 24.00 Kb  Data bytes: 100.00 b 
+
+\begin{tabular}{llrr}
+	\toprule
+	{} &      Time &   Neasted &  Index \\
+	\midrule
+	0 &  Creation &  0.426866 &    0.0 \\
+	1 &     Acess &  0.000000 &    0.0 \\
+	\bottomrule
+\end{tabular}
+
+
+Keys: [16,10,5,3,10] 24.00 Kb  Data bytes: 1.00 Kb 
+
+\begin{tabular}{llrr}
+	\toprule
+	{} &      Time &   Neasted &  Index \\
+	\midrule
+	0 &  Creation &  4.162496 &    0.0 \\
+	1 &     Acess &  0.000000 &    0.0 \\
+	\bottomrule
+\end{tabular}
+
+
+Keys: [16,10,5,3,10] 24.00 Kb  Data bytes: 10.00 Kb 
+
+\begin{tabular}{llrr}
+	\toprule
+	{} &      Time &    Neasted &  Index \\
+	\midrule
+	0 &  Creation &  42.476255 &    0.0 \\
+	1 &     Acess &   0.000000 &    0.0 \\
+	\bottomrule
+\end{tabular}
+
+
+Keys: [1]*1000 1.00 Kb  Bytes: 10.00 Kb 
+
+\begin{tabular}{llllr}
+	\toprule
+	{} & Storage &    Neasted &     Index &  Neasted/Index \\
+	\midrule
+	0 &     RAM &  314.94 Kb &  19.23 Kb &      16.380038 \\
+	1 &   JSON  &   23.89 Kb &  18.90 Kb &       1.264328 \\
+	2 &     PKL &   23.91 Kb &  18.92 Kb &       1.263904 \\
+	3 &      GZ &   10.34 Kb &  10.14 Kb &       1.019525 \\
+	\bottomrule
+\end{tabular}
+
+
+Keys: [1]*1000 1.00 Kb  Data bytes: 10.00 Kb 
+
+\begin{tabular}{llrr}
+	\toprule
+	{} &      Time &   Neasted &  Index \\
+	\midrule
+	0 &  Creation &  0.003023 &    0.0 \\
+	1 &     Acess &  0.000000 &    0.0 \\
+	\bottomrule
+\end{tabular}
+
+}
+
+From the tests, we conclude that index dictionary is a better option for speed and nested dictionary for space, although if the data size is significantly higher than the number of keys it doesn't save a lot of space. Because of that, we choose to work with index.
+
+\subsubsection{Structure}
+The data structure holds
+
+\begin{lstlisting}
+{
+    "config": {
+        "pkg": "./openmp_simple_bin",
+        "execdate": "29-03-2020_13:07:07",
+        "command": "run_test.py TestMonitor.test_valid_combinations",
+        "hostname": "MSI",
+        "kernel": "Linux-4.4.0-18362-Microsoft-x86_64-with-Ubuntu-18.04-bionic",
+        "disable_hyperthread": true,
+        "disable_cores": true,
+        "idle_time": 0,
+        "data_descriptor": {
+            "values": [ ... ],
+            "extras": {
+                "regions": {
+                "values": [ ... ]
+            }
+         },
+        "keys": [ ... ]
+    },
+    "arguments": [ ... ],
+    "governor": "userspace"
+    },
+    "data": {
+        "4;1.2e-06;1;1": {
+            "regions": {
+                "0x1": [
+                        [ ... ],
+                        ...
+                    ],
+                ...
+            },
+            ...,
+            "total_time": 0.3075871467590332
+        },
+        ...
+    }
+}
+\end{lstlisting}
+
+\subsection{Overhead}
+\subsubsection{BlackSchoels test}
+
+$number\_of\_tests=96$\\
+$max\_number\_threads=32$\\
+$type\_of\_step=power$\\
+$value\_of\_step=2$\\
+$list\_of\_args=\{in\_312K.txt \quad outputFile.txt\}$
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+	\includegraphics[width=\textwidth]{pascalanalyzer/figures/black100b}
+	\caption{With SPERF}
+	\label{fig:black100b}
+	\end{subfigure}
+	%
+	\begin{subfigure}[b]{0.45\textwidth}
+	\includegraphics[width=\textwidth]{pascalanalyzer/figures/black2100b}
+	\caption{With Linux Time}
+	\label{fig:black2100b}
+	\end{subfigure}
+\end{figure}
+
+\subsubsection{Freqmine test}
+
+$number\_of\_tests=96$\\
+$max\_number\_threads=32$\\
+$type\_of\_step=power$\\
+$value\_of\_step=2$\\
+$list\_of\_args=\{kosarak\_990k.dat \quad 1200 \quad output.txt\}$
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{pascalanalyzer/figures/freq100b}
+		\caption{With SPERF}
+		\label{fig:freq100b}
+	\end{subfigure}
+	%
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{pascalanalyzer/figures/freq2100b}
+		\caption{With Linux Time}
+		\label{fig:freq2100b}
+	\end{subfigure}
+\end{figure}
+
+
+\subsubsection{Intrusiveness measurement}
+
+The statistical result obtained from the test above from Blackscholes and Freqmine was shown in the tables \ref{tab:blackstatistics} and \ref{tab:freqstatistics}.Where we can compare the result mean and standard deviation from two groups one with SPERF and the other without.
+
+\begin{table}[H]
+	\centering
+	\caption{Statistics for BlackSchoels}
+	\label{tab:blackstatistics}
+	\begin{tabular}{llll}
+		& With Sperf & Without Sperf & Total    \\
+		N               & 96         & 96            & 192      \\
+		$\sum{X}$       & 100,19     & 103,0134      & 203,2034 \\
+		Mean            & 1,0436     & 1,0731        & 1,0584   \\
+		$\sum{X^2}$     & 105,5093   & 112,4857      & 217995   \\
+		Std.Dev.        & 0,0998     & 0,1431        & 124     
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\caption{Statistics for Freqmine}
+	\label{tab:freqstatistics}
+	\begin{tabular}{llll}
+		& With Sperf & Without Sperf & Total    \\
+		N           & 96         & 96            & 192      \\
+		$\sum{X}$   & 202,8016   & 205,44        & 408,2416 \\
+		Mean        & 2,1125     & 2,14          & 2,1263   \\
+		$\sum{X^2}$ & 429,9198   & 440,428       & 870,3478 \\
+		Std.Dev.    & 0,1256     & 0,091         & 0,1102  
+	\end{tabular}
+\end{table}
+
+Given the summary statistics, the calculations of the hypothesis test are shown in tabular form in the tables \ref{tab:blackAnova} and \ref{tab:freqsAnova}.
+
+\begin{table}[H]
+	\centering
+	\caption{Anova f test}
+	\label{tab:blackAnova}
+	\begin{tabular}{lllll}
+		Source             & SS     & df  & MS     &             \\
+		Between-treatments & 0,0415 & 1   & 0,0415 & F = 2,72671 \\
+		Within-treatments  & 2893   & 190 & 0,0152 &             \\
+		Total              & 2,9345 & 191 &        &            
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\caption{Anova f test}
+	\label{tab:freqsAnova}
+	\begin{tabular}{lllll}
+		Source             & SS     & df  & MS     &             \\
+		Between-treatments & 0,0363 & 1   & 0,0363 & F = 3.01548 \\
+		Within-treatments  & 2,2844 & 190 & 0,012  &             \\
+		Total              & 2,3206 & 191 &        &            
+	\end{tabular}
+\end{table}
+
+If we take a significance level of 5\% the critical value of F with 1 and 190 degrees of freedom on numerator and denominator respectively is 3.8909. Size booth values of F calculated is lower then the critical there is no significant statistical difference on the mean value according to ANOVA.
+
+%\begin{figure}[H]
+%	\includegraphics[width=7cm,height=4.5cm]{ftest}
+%	\caption{F distribution}
+%	\label{fig:Fdist}
+%\end{figure}
+
+\subsubsection{Sampling}
+
+Energy estimation method for power samples
+Time difference
+\begin{equation}
+	E= \sum_i^{N-1}(t_{i+1}-t_i)p_i+s_N(t_{tot}-t_N)
+\end{equation}
+
+Constant sample time
+\begin{equation}
+E= s_r\sum_i^{N}p_i=TP_{avg}
+\end{equation}
+
+Error due to sampling
+\begin{itemize}
+	\item Time difference $\approx$ 4\%
+	\item Constant sample time 	$\approx$ 1\%
+\end{itemize}
+
+\subsection{Database}
+
+\begin{outline}
+	\1 Advantages
+		\2 No need to organize the files
+		\2 Faster and easier queries
+		\2 Shared data across programs and research
+	\1 Disadvantages
+		\2 Need of db server
+		\2 Need of network
+		\2 Non local server maybe slow ( need to cache )
+\end{outline}

@@ -1,0 +1,15 @@
+% Capítulo 2
+\chapter{Revisão Bibliografia} \label{cap:revisao_bibliografica}
+
+O DVFS é a técnica mais comum empregada para obter economia de energia em sistemas com processadores modernos. Assim, a técnica tem sido extensivamente pesquisada com o objetivo de fornecer estratégias para selecionar a tensão e a frequência ideais para uma aplicação em arquitetura específica. Existem diversas teorias sobre a melhor forma de aplicá-la. No artigo \cite{Albers2014} foi provado que o problema de escalonamento de frequência com o estado ocioso para minimizar a energia é da classe NP-difícil. Embora seja complicado encontrar a melhor configuração possível, com algumas simplificações no modelo é possível encontrar bons resultados, sendo um problema  no qual não existe uma solução ótima.
+
+Em \cite {Anghel2011}, os autores utilizaram dois algoritmos para escalonar a frequência dos processadores: um algoritmo inspirado no sistema imunológico humano para monitorar os estados de potência e desempenho do servidor e um algoritmo baseado em lógica fuzzy para alterar o estado de desempenho do servidor. Também em \cite{Cochran2011} foi introduzido um método de escalonamento para determinar os pontos de operação ideais do sistema para o número de núcleos e configurações de DVFS.
+
+\cite{DaCosta2015} propôs uma abordagem que considera estados de atividade instantânea do sistema, nesse caso, a memória e a atividade de rede foram usadas para gerar uma configuração de gerenciamento de DVFS. 
+
+Registradores contadores de performance do RAPL também foram usados para executar o DVFS. Em \cite{Spiliopoulos2011}, os autores usaram um DVFS contínuo adaptável com base em um modelo de desempenho do processador. O modelo foi baseado na amostragem de contadores de desempenho em hardware para ver regularmente cargas de trabalho de desempenho/energia. Baseando-se nas predições as configurações apropriadas de voltagem e as frequências eram selecionadas.
+
+\cite{Georgiou:2017} utilizaram um modelo de energia para uma arquitetura multissegmentada de vários núcleos e análise de recursos estáticos para avaliar a economia de energia e tempo de várias configurações de DVFS para o mesmo programa. Embora tenham sido capazes de identificar a melhor configuração sem a necessidade de executar o programa com cada configuração diferente e medir tempo e energia, a abordagem é bastante limitada, pois a análise estática não é dimensionada para arquiteturas e programas menos previsíveis.
+
+
+Com base no que já foi pesquisado foi percebido que modelagem de potencia e desempenho de aplicações não são utilizados para o DVFS, que é a proposta deste trabalho. Além disso o foco do DVFS é redução do consumo de potência o que pode levar a um maior consumo de energia devido ao aumento no tempo total de execução. Outro problema é quando existe variações bruscas na carga do processador que causam uma variação muito grande na frequência que geralmente não leva a bons resultados.

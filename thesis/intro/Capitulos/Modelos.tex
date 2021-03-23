@@ -1,0 +1,180 @@
+% Capítulo 4
+\chapter{Modelos} \label{cap:modelos}
+
+\section{Potência}  \label{sec:potencia}
+
+Os principais fatores que contribuem para o consumo de energia do processador são consumo dinâmico, por curto-circuito e a perda de energia devido ao vazamento de corrente \cite{Rauber2014, Goel2016, Du2017, Gonzalez1997}, sendo que, a complexidade dos circuitos dos processadores modernos torna muito difícil modelar seu consumo de energia fisicamente acurado. Uma abordagem viável para modelar o consumo de energia do processador é modelar seus componentes principais, que são as portas lógicas. Assim, modelar o consumo de energia para uma porta lógica e multiplicando pelo número total de portas, reduz a complexidade da modelagem e fornecendo precisão suficiente para tomar decisões de otimização, que pode ser observado na seção \ref{cap:resultados}.
+
+A modelagem do consumo de energia do processador utilizada baseia-se no circuito \abrv[CMOS -- Complementary Metal Oxide Semiconductor]{CMOS} \cite{Sarwar1997, Butzen2007} que é uma tecnologia empregada na fabricação de circuitos lógicos. Esta modelagem é uma aproximação que leva em consideração que o processador é basicamente constituído destes circuitos. Sendo assim, o consumo total de energia é proporcional ao número de circuitos lógicos multiplicado pelo consumo de um circuito lógico.
+
+Existem 3 componentes principais para a dissipação de energia nos circuitos CMOS como visto na Equação (\ref{eq_totalPower}).
+
+\begin{equation}
+P_{total}=P_{static}+P_{leak}+P_{dynamic} \label{eq_totalPower}
+\end{equation}
+
+Onde $P_{total}$ é a potência total dissipada, $P_{dynamic}$ é a dinâmica, devido ao chaveamento do circuito, $P_{static}$ a potência estática e $P_{leak}$ e a potência  perdida devido ao vazamento de corrente no transistor.
+
+Na Figura \ref{fig:CMOS} é mostrado um circuito CMOS inversor que é composto por dois transistores um PMOS e un NMOS, e mais um capacitor.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.5cm]{Imagens/CMOS.jpg}
+\caption{Diagrama eletrico do circuito do CMOS inversor}{Imagem retirada de \protect\url{https://www.hindawi.com/journals/vlsi/2012/505983/}}
+\label{fig:CMOS}
+\end{figure}
+
+A dissipação de potência dinâmica é causada pela carga do capacitor no circuito durante cada transição de alto para baixo na tensão de entrada, onde parte da energia da fonte é dissipada no PMOS e a outra parte é armazenada no capacitor que é descarregada no NMOS na transição de baixo para alta, na tensão de entrada.
+
+Considerando o CMOS inversor mostrado na Figura \ref{fig:CMOS}, assumindo que a tensão de entrada tem a forma de uma onda quadrada com período de ciclo de trabalho T a energia consumida na transição baixo para alto pode ser derivada calculando a potência média consumida pela fonte o que é dado por (\ref{eq:pwdyn}).
+
+\begin{equation}
+P_{dynamic}=\frac{1}{\delta T}\int_{t_1}^{t_2}P(t)dt=\frac{1}{T}\int_{0}^{\infty}i_{vdd}(t)V_{dd}dt \label{eq:pwdyn}
+\end{equation}
+
+Sabendo que a corrente em um capacitor é dada por \ref{eq:corrent_cap}.
+
+\begin{equation}
+i_{vdd}=C\frac{dV}{dt} \label{eq:corrent_cap}
+\end{equation}
+
+Assim temos (\ref{eq:pwdyn_2}).
+
+\begin{equation}
+P_{dynamic}=\frac{V_{dd}}{T}\int_{0}^{\infty}C\frac{dV}{dt}dt=\frac{CV_{dd}^2}{T}=CV_{dd}^2f \label{eq:pwdyn_2}
+\end{equation}
+
+A corrente vazada no circuito é devido principalmente a diversos fatores como visto em \cite{Butzen2007}, mas como a variação da corrente de vazamento é pequena para simplificar consideraremos que a corrente vazada é praticamente constante simplificando para (\ref{eq:pwleak}):
+
+\begin{equation}
+P_{leak}=I_{leak}V_{dd}\alpha V_{dd} \label{eq:pwleak}
+\end{equation}
+
+A potência estática é devido a corrente que vai da fonte diretamente para o terra que é aproximadamente constante.
+
+Embora seja possível alterar a frequência e voltagem de forma independente, na prática isso não acontece \cite{Usman2013}, pois dado uma voltagem existe uma frequência máxima em que o circuito pode chegar, para a qual acima deste valor os resultados já não são mais confiáveis. Essa frequência é limitada pelo caminho crítico do circuito, que é a maior distancia entre uma entrada e saída. Também, a frequência nunca é colocada em um valor muito baixo pois resultaria em desperdício de energia. Logo os circuitos tendem a seguir a relação (\ref{eq:fpropv_1}).
+
+\begin{equation}
+f \alpha \frac{(V-V_{th})^{\eta}}{V} \label{eq:fpropv_1}
+\end{equation}
+%\simb[$\alpha$ Proporcional]{$\alpha$}
+
+Onde $V_{th}$ é a voltagem de transição, $\eta$ é uma constante que depende da resposta em frequência do transistor. Para os transistor que não saturam com velocidade podemos considerar $V>>V_{th}$ e aproximar $n=2$ segundo \cite{Gonzalez1997}.
+
+\begin{equation}
+f \approx \frac{(V-V_{th})^{\eta}}{V} \approx \frac{V^2}{V} \approx V  \label{eq:fpropv_2}
+\end{equation}
+
+Assim o modelo final do processador considerando que ele tem n circuitos lógicos é (\ref{eq:final_1}).
+
+\begin{equation}
+P_{total}(f)= (CV_{dd}^2f+I_lV_{dd}+P_s)n \label{eq:final_1}
+\end{equation}
+
+Simplificando as constantes e colocando tudo em função da frequência temos (\ref{eq:final_fit}).
+
+\begin{equation}
+P_{total}(f)= c_1f^3+c_2f+c_3 \label{eq:final_fit}
+\end{equation}
+
+Ampliando este modelo de forma eurística para sistemas multicores com p cores, foi definido (\ref{eq:final_cores}).
+
+\begin{equation}
+P_{total}(f,p)= p(c_1f^3+c_2f)+c_3 \label{eq:final_cores}
+\end{equation}
+
+Finalmente, considerando sistemas com mais de um processador, onde foi incluído mais um termo estático devido a energia para ativar cada um, resultando em (\ref{eq:final_cores_sock}).
+
+\begin{equation}
+P_{total}(f,p,s)= p(c_1f^3+c_2f)+c_3+c_4s \label{eq:final_cores_sock}
+\end{equation}
+
+Onde $s$ é o número total de processadores, $p$ é o numero de núcleos, $f$ a frequência e $c_1$,$c_2$,$c_3$ e $c_4$ são constantes.
+
+\section{Performance} \label{sec:performance}
+
+O modelo de performance tem como objetivo estimar o tempo de execução da aplicação a partir da frequência, número de cores e tamanho da entrada. Para isso foi utilizado a SVR como visto na Figura \ref{fig:svr}, que é uma versão da técnica de aprendizagem da máquina supervisionada baseada em vetor de suporte para regressão.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=2cm]{Imagens/svr_diagrama.png}
+\caption{Diagrama da SVR}
+\label{fig:svr}
+\end{figure}
+
+A SVR \cite{Drucker1997} consiste em encontrar uma função $f(x)$ de forma que o erro máximo para o alvo seja de $\epsilon$ para todos os pontos do treinamento \cite{Smola2004}. Ela funciona da seguinte forma: Dado o conjunto de treinamento, um vetor de entrada $x_i$ com saída $y_i$, é resolvido o seguinte problema de otimização (\ref{eq:svr_primal}).
+
+\begin{equation}
+\label{eq:svr_primal}
+\min_{w,\xi_i,\xi_i^*}\frac{1}{2}w^Tw+C\sum_{i}^{n}{\xi_i+\xi_i^*}
+\end{equation}
+Sujeito a:
+\[ 
+\begin{cases} 
+      y_i-w^T\phi(x_i)-b \leq \varepsilon+\xi_i \\
+      w^T\phi(x_i)+b-y_i \leq \varepsilon+\xi_i^* \\
+      \xi_i,\xi_i^* \geq 0, i=0,..,n
+\end{cases}
+\]
+
+Os valores que queremos encontrar são $w$ que é o vetor de suporte. $\xi$ é uma variável de folga que permite que o modelo tenha um erro maior que $\epsilon$ em alguns casos, garantindo a convergência onde existem pontos muito fora da curva e b que é o bias.
+
+Os parâmetros desse modelo são, $\phi(x)$, $\epsilon$ e $C$. O $\phi(x)$ é uma função kernel que mapeia a entrada em outro espaço de maior dimensão permitindo que o algoritmo se ajuste ao hiperplano de margem máxima em um espaço transformado. Isso permite a não linearidade desse algoritmo ao utilizar uma função kernel não linear. As funções kernel mais comuns são polinomial, função de base radial de Gauss (RBF) e tangente hiperbólica. O $\epsilon$ é o desvio máximo para o alvo $y_i$. A constante $C$ determina a tolerância para erros maiores que $\epsilon$.
+
+A resolução deste problema de otimização pode ser feita eficientemente em sua forma dual de Lagrange, que é obtida através da função objetivo de Lagrange utilizando multiplicadores não negativos. Ao adicionar as restrições de otimização e resolver para as variáveis do problema original que minimiza esta função ficando com as variáveis do problema original em função dos multiplicadores de Lagrange, que são chamados de variáveis duais, assim o novo problema é maximizar a função objetivo em função das variáveis duais incluindo as restrições de não negatividade. O novo problema se torna:
+
+\begin{equation}
+\label{eq:svr_dual}
+\max_{\alpha,\alpha^*}{-\frac{1}{2}\sum_{i,j}{(\alpha_i-\alpha_i^*)(\alpha_j-\alpha_j^*)k(x_i,x_j)}-\epsilon \sum_{i}{(\alpha_i-\alpha_i^*)}+\sum_{i}{y_i(\alpha_i-\alpha_i^*)}}
+\end{equation}
+Sujeito a:
+\[
+\begin{cases} 
+      \sum_{i}{(\alpha_i-\alpha_i^*)}=0\\
+      \alpha_i,\alpha_i^* \in [0,C] \\
+   \end{cases}
+\]
+
+Onde $k(x,x')=\langle \phi(x), \phi(x') \rangle$ e $\alpha_i,\alpha_i^*$ são os multiplicadores de Lagrange e $f(x)$,$w$ e $b$ são:
+
+\begin{equation}
+\label{eq:svr_fx}
+f(x)= \sum_{i}{(\alpha_i-\alpha_i^*)k(x_i,x)}+b
+\end{equation}
+
+\begin{equation}
+\label{eq:svr_w}
+w= \sum_{i}{(\alpha_i-\alpha_i^*)\phi(x_i)}
+\end{equation}
+
+\begin{equation}
+\label{eq:svr_b}
+b= y_i-\langle w,x_i \rangle-\epsilon
+\end{equation}
+
+Os valores de $\alpha_i,\alpha_i^*$ por sua vez podem ser encontrados de forma iterativa e eficiente utilizando o algorítimo "Sequential minimal optimization" \cite{Platt1998}.
+
+Pela equação (\ref{eq:svr_fx}) podemos ver que a complexidade do algorítimo é linearmente dependente do número de amostras do treinamento assim como os vetores de suporte. A grande vantagem desse método é que pelas restrições do problema de otimização serem estritamente convexas, é garantida uma solução única. Isto significa que algorítimos SVs não tem problemas de mínimos locais como Redes Neurais.
+
+
+\section{Energia} \label{sec:energia}
+
+Combinando o modelo de energia da seção anterior e a caracterização SVR do tempo podemos estimar a energia total consumida com a equação da energia média descrita por:
+
+\begin{equation}
+%E_m=\int_{t1}^{t2}P_mdt=P_m\delta T
+E_m=P_m\Delta T
+\end{equation}
+
+Substituindo os modelos descritos nas Seções \ref{sec:potencia} e \ref{sec:performance}, obtemos a equação (\ref{eq:energia}).
+
+\begin{equation}
+E(f,p,s,N)=P(f,p,s)SVR(f,p,N)
+\label{eq:energia}
+\end{equation}
+
+Onde $f$ é a frequência, $p$ o número de cores ativos, $s$ o número de processadores ativos e $N$ o tamanho da entrada.
+
+Este modelo possui algumas restrições, pois, não prevê a variação do consumo de potência ao longo do tempo, devido à variação da utilização do processador. Assim é necessário escolher uma carga para modelar a equação de potência. Por causa disso a energia real consumida será diferente da estimada por um fator multiplicativo em alguns casos, mas, a tendência geral será a mesma, o que possibilita encontrar o mínimo.
+
+Com esta equação é possível encontrar a configuração onde a energia é minimizada para uma determinada entrada, mas, também encontrar a configuração mínima de energia dada uma restrição de tempo, frequência ou número de núcleos ativos.
