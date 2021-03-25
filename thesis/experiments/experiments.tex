@@ -29,13 +29,13 @@ In state C, the higher the level the greater the energy savings, but returning t
 \centering
 \begin{subfigure}[t]{0.5\textwidth}
 \centering
-\includegraphics[height= 7.5cm]{intro/Imagens/c_states}
+\includegraphics[height= 7.5cm]{intro/figures/c_states}
 \caption {C states}
 \end {subfigure}%
 ~
 \begin{subfigure}[t]{0.5\textwidth}
 \centering
-\includegraphics[height= 7.5cm]{intro/Imagens/p_states}
+\includegraphics[height= 7.5cm]{intro/figures/p_states}
 \caption {States P}
 \end {subfigure}
 \caption {Illustration of states C and P} {Altered image from \protect \url {https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states}}
@@ -67,7 +67,7 @@ IPMI \cite {November2013} is a set of specifications for autonomous subsystems t
 
 \begin {figure} [H]
 \centering
-\includegraphics [height = 7.5cm] {intro/Imagens/IPMI-Block-Diagram.png}
+\includegraphics [height = 7.5cm] {intro/figures/IPMI-Block-Diagram.png}
 \caption {IMPI diagram} {Image taken from \protect \url {https://pt.wikipedia.org/wiki/Intelligent_Platform_Management_Interface}, the main components of IPMI and how they communicate are shown}
 \label {fig: IPMI}
 \end {figure}
@@ -147,28 +147,28 @@ Modern Intel microprocessors, based on the SandyBridge architecture, include the
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\columnwidth]{models/figures/hypothesis/input_instructions/fp/Blackschole.png}
+	\includegraphics[width=\columnwidth]{models/figures/hypothesis/input_instructions/fp/blackscholes.png}
 	\caption{Caption}
 	\label{fig:my_label}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\columnwidth]{models/figures/hypothesis/input_instructions/fp/Canneal.png}
+	\includegraphics[width=\columnwidth]{models/figures/hypothesis/input_instructions/fp/canneal.png}
 	\caption{Caption}
 	\label{fig:my_label}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\columnwidth]{models/figures/hypothesis/input_instructions/input_time/Blackschole.png}
+	\includegraphics[width=\columnwidth]{models/figures/hypothesis/input_instructions/input_time/blackscholes.png}
 	\caption{Caption}
 	\label{fig:my_label}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\columnwidth]{models/figures/hypothesis/input_instructions/input_time/Canneal.png}
+	\includegraphics[width=\columnwidth]{models/figures/hypothesis/input_instructions/input_time/canneal.png}
 	\caption{Caption}
 	\label{fig:my_label}
 \end{figure}
@@ -280,7 +280,7 @@ Figures \ref{fig:en_eq_black}, \ref{fig:en_eq_canneal} plot the measured and mod
 \subsubsection{Validation}
 The validation results for each application trained with 10 random configurations are displayed in figure \ref{fig:mpe_svr_eq} and the raw MPE values in  table~\ref{tab:mpe_svr_eq}.
 \begin{figure}[htb!]
-	\includegraphics[width=\columnwidth]{models/figures/mpe_svr_eq.png}
+	\includegraphics[width=\columnwidth]{models/figures/mae_svr_eq.png}
 	\caption{Comparison of the Mean Percentage Error between the proposed model and SVR. "Model mean" and "SVR mean" are the average of all MPE values for all applications.
 	}
 	\label{fig:mpe_svr_eq}
@@ -345,14 +345,14 @@ The error of the analytical model is almost constant but that of  the SVR, initi
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}[b]{0.44\textwidth}
-		\centerline{\includegraphics[width=\columnwidth]{models/figures/overhead/overall.png}}
+		\centerline{\includegraphics[width=\columnwidth]{models/figures/overhead/overall_energy_10pts.png}}
 		\caption{Average energy spent on all applications during model creation. The two curves are identical because the same data were used to adjust the SVR and the model.}
 		\label{fig:overall_overhead}
 	\end{subfigure}
 	%
 	\quad
 	\begin{subfigure}[b]{0.44\textwidth}
-		\centerline{\includegraphics[width=\columnwidth]{models/figures/overhead/overall_mpe.png}}
+		\centerline{\includegraphics[width=\columnwidth]{models/figures/overhead/overall_mpe_10pts.png}}
 		\caption{
 			MPE all applications: SVR needs 10 times more data to have an MPE lower than the model.}
 		\label{fig:overall_MPE}
