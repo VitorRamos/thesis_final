@@ -89,8 +89,16 @@
 \usepackage{subcaption}
 \usepackage{cleveref}
 \usepackage{listings}
+
+
 %\usepackage[caption=false,font=footnotesize]{subfig}
 %\usepackage[export]{adjustbox}
+
+\lstset { %
+	language=C++,
+	backgroundcolor=\color{black!5}, % set backgroundcolor
+	basicstyle=\footnotesize,% basic font setting
+}
 
 \newcommand*\rot{\rotatebox{90}}
 
@@ -135,6 +143,7 @@ In this Section, the proposed power, performance and energy models are derived a
 \chapter{Optmizers}
 This chapter talks about the different types of optimizers.
 \include{optmizers/optmizers}
+\include{phases/phases}
 
 \chapter{Framework}
 This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
