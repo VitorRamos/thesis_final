@@ -105,30 +105,71 @@
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
 		T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 	
-\usepackage{suthesis-2e}
-\dept{Computer Science}
+%\usepackage{suthesis-2e}
+%\dept{Computer Science}
+
+\usepackage[fpms]{umons-coverpage}
+\umonsAuthor{Vitor Ramos Gomes \textsc{SILVA}}
+\umonsTitle{Energy aware high-performance computing}
+\umonsDocumentType{A DISSERTATION SUBMITTED TO THE ELECTRONICS AND MICROELECTRONICS DEPARTMENT OF MONS UNIVERSITY IN PARTIAL FULFILLMENT OF THE REQUIREMENTS FOR THE DEGREE OF DOCTOR IN ENGINEERING SCIENCES AND TECHNOLOGY}
+%\umonsSupervisor{Supervisor\\ Carlos Alberto \textsc{VALDERRAMA}\\
+%				 Co-supervisor\\ Pierre \textsc{MANEBACK}}
+\umonsSupervisor{
+ 		Thesis committee:\\
+ 		Supervisor: Prof. Carlos Alberto \textsc{VALDERRAMA}\\
+ 		Co-supervisor: Prof. Pierre \textsc{MANEBACK}\\
+ 		Prof. Thierry \textsc{DUTOIT}\\
+ 		Prof. Sidi \textsc{MAHMOUDI}\\
+ 		Prof. Samuel \textsc{XAVIER-DE-SOUZA}
+}
+\umonsDate{April 2021}
+
+
 
 \begin{document}
-\title{Energy aware HPC}
-\author{Vitor Ramos Gomes da Silva}
-\principaladviser{Carlos Valderrama}
-\coprincipaladviser{Pierre MANNEBACK}
-\firstreader{Thierry DUTOIT}
-\secondreader{Sidi MAHMOUDI}
-\thirdreader{Samuel Xavier de Souza} %if needed
- 
-\beforepreface
-\prefacesection{Preface}
-Second Phd Committee
+%\title{Energy aware HPC}
+%\author{Vitor Ramos Gomes da Silva}
+%\principaladviser{Carlos Valderrama}
+%\coprincipaladviser{Pierre MANNEBACK}
+%\firstreader{Thierry DUTOIT}
+%\secondreader{Sidi MAHMOUDI}
+%\thirdreader{Samuel Xavier de Souza} %if needed
+% 
+%\beforepreface
+%\prefacesection{Preface}
+%%Second Phd Committee
 %\prefacesection{Acknowledgments}
-%I would like to thank...
-\afterpreface
+%%I would like to thank...
+%\afterpreface
 
-\chapter{Introduction}
+\umonsCoverPage
+
+%\section*{Acknowledgments}
+%\vspace{1cm}
+%\begin{center}
+%	...
+%\end{center}
+%\newpage
+
+\section*{Abstract}
 Energy consumption is a key to enable exascale High-performance Computing (HPC). Energy-optimized hardware and software combinations still could be inefficient if software operates poorly. 
 Software operation relies on dynamic scaling of frequency and voltage (DVFS) as well as dynamic power management (DPM), but none have priority information on the application, which leads to inefficient software operation. This work proposes an analytical model that can be used to estimate energy-optimal software operation. 
 This work proposes a new energy model that can be used as a basis to optimize DVFS and DPM, as well as to assess the contribution of parameters such as parallelism level and dynamic power to the energy consumption.
 Since in HPC, applications can run on multiple cores and associated frequencies, both of which can be controlled for most systems, the novelty of the model includes such parameters as well as the workload, two application parameters and three system parameters.
+
+\vspace{2cm}
+\textbf{Keywords :} Energy Model; Dynamic Frequency and Voltage Scaling; Dynamic Power Management; High Performance Computing
+\newpage
+
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+
+\chapter{Introduction}
+
 \include{intro/intro}
 
 %\chapter{Approch}
