@@ -5,14 +5,15 @@ fontname=latinmodern,
 fontsize=11pt,
 twoside,
 final,
-faculty=fpms
+faculty=fpms,
 ]{umons-Thesis}
 
 % Styles
 \headstyles{umons}
 \pagestyle{umons}
+%\setcounter{secnumdepth}{4}
 
-
+\usepackage{breakcites}
 \usepackage[main=english]{babel}
 \usepackage[autostyle=true]{csquotes}
 \usepackage[babel=true]{microtype}
@@ -22,6 +23,8 @@ faculty=fpms
 \usepackage{booktabs}
 \usepackage{mathtools}
 \usepackage{siunitx}
+\usepackage{multirow}
+
 \sisetup{%
 	binary-units = true,%	loads units for binary data (\bit, \byte)
 }
@@ -30,9 +33,108 @@ hidelinks,%				hides links (removing color and border)
 pdfusetitle,%			uses the content of \author{}... for metadata
 pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 ]{hyperref}
-\usepackage{cleveref}
+\usepackage[capitalise]{cleveref}
 \usepackage{outlines}
 \usepackage{listings}
+
+
+\definecolor{light-gray}{gray}{1}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{gray}{1}
+\definecolor{commentgreen}{RGB}{2,112,10}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+
+\lstdefinestyle{jsonstyle}{
+	commentstyle=\color{commentgreen},
+	backgroundcolor=\color{light-gray},
+	basicstyle=\ttfamily\small,
+	breakatwhitespace=false, 
+	breaklines=true, 
+	captionpos=b, 
+	keepspaces=true, 
+	numbers=left, 
+	numbersep=5pt, 
+	showspaces=false, 
+	showstringspaces=false,
+	showtabs=false, 
+	tabsize=1,
+	literate={\ \ }{{\ }}1
+}
+
+\lstdefinelanguage{json}{
+	basicstyle=\ttfamily\small\normalfont,
+	numbers=left,
+	numberstyle=\scriptsize,
+	stepnumber=1,
+	numbersep=4pt,
+	showstringspaces=false,
+	breaklines=true,
+	frame=lines,
+	tabsize=1,
+	literate={\ \ }{{\ }}1,
+	backgroundcolor=\color{background},
+	morecomment=[f][\color{red}][0]{*},
+	literate=
+	{:}{{{\color{punct}{:}}}}{1}
+	{,}{{{\color{punct}{,}}}}{1}
+	{\{}{{{\color{delim}{\{}}}}{1}
+	{\}}{{{\color{delim}{\}}}}}{1}
+	{[}{{{\color{delim}{[}}}}{1}
+	{]}{{{\color{delim}{]}}}}{1},
+}
+
+\lstdefinestyle{ccodestyle}{
+	language=C,
+	commentstyle=\color{commentgreen},
+	backgroundcolor=\color{light-gray},
+	basicstyle=\ttfamily\small,
+	breakatwhitespace=false, 
+	breaklines=true, 
+	captionpos=b, 
+	keepspaces=true, 
+	numbers=left, 
+	numbersep=5pt, 
+	showspaces=false, 
+	showstringspaces=false,
+	showtabs=false, 
+	tabsize=2,
+	xleftmargin=0.5cm,
+	emph={int,char,double,float,unsigned,return},
+	emphstyle={\color{blue}}
+}
+
+\lstdefinestyle{pythonStyle}{
+	%backgroundcolor=\color{backcolour},
+	backgroundcolor=\color{light-gray},
+	basicstyle=\ttfamily\small,
+	commentstyle=\color{codegreen}\itshape,
+	keywordstyle=\color{magenta}\bfseries,
+	%numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	belowcaptionskip=\medskipamount,
+	breakatwhitespace=false, 
+	breaklines=true, 
+	captionpos=t, 
+	keepspaces=true,
+	frame=top,frame=bottom,
+	framexbottommargin=5pt,
+	%framextopmargin=5pt,
+	xleftmargin=0.5cm,
+	numbers=left, 
+	numbersep=5pt, 
+	showspaces=false, 
+	showstringspaces=false,
+	showtabs=false, 
+	tabsize=2
+}
+
 
 \lstset { %
 	language=C++,
@@ -41,10 +143,18 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 }
 
 \newcommand*\rot{\rotatebox{90}}
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+\def\BibTeX{{\rmfamily B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
 		T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
 
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+\DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+\DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+\DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+
+\crefname{lstlisting}{listing}{listings}
 %%        %%
 % DOCUMENT %
 % ======== %
@@ -99,28 +209,40 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	\mainmatter
 	
 	\chapter{Introduction}
-	
+	This chapter will...
 	\include{intro/intro}
 	
-	\chapter{Proposed Models}
-	In this Section, the proposed power, performance and energy models are derived and validated
+	\chapter{Proposed Models} \label{chapter:models}
+	In this chapter, the proposed power, performance and energy models are derived and validated.
+	Energy consumption is crucial in high-performance computing (HPC), especially to enable the next exascale generation. Hence, modern systems implement various hardware and software features for power management. Nonetheless, due to numerous different implementations, we can always push the limits of software to achieve the most efficient use of our hardware. To be
+	energy efficient, the software relies on dynamic voltage and frequency scaling (DVFS), as well as dynamic power management (DPM). Yet, none have privileged information on the hardware architecture and application behavior, which may lead to energy-inefficient software operation. 
+	This study  proposes analytical modeling for architecture and application behavior that can be used to estimate energy-optimal software configurations and provide knowledgeable hints to improve DVFS and DPM techniques for single-node HPC applications.
+	Additionally, model parameters, such as the level of parallelism and dynamic power, provide insights into how the modeled application consumes energy, which can be helpful for energy-efficient software development and operation.
+	This novel analytical model takes the number of active cores, the operating frequencies, and the input size as inputs to provide energy consumption estimation.
+	We present the modeling of 13 parallel applications employed to determine energy-optimal configurations for several different input sizes.
+	The results show that up to 70\% of energy could be saved in the best scenario compared to the default Linux choice and 14\% on average.
+	We also compare the proposed model with standard machine-learning modeling concerning training overhead and accuracy. The results show that our approach generates about 10 times less energy overhead for the same level of accuracy.
 	\include{models/models}
 	\include{phases/phases}
-	\include{optmizers/optmizers}
+	%\include{optmizers/optmizers}
 	
 	\chapter{Framework}
 	This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
-	\include{fingerprint/fingerprint}
-	\include{pascalanalyzer/pascalanalyzer}
 	
-	\chapter{Results (model validation)}
+	\include{pascalanalyzer/pascalanalyzer}
+	\include{fingerprint/fingerprint}
+	
+	\chapter{Experiments and Results}
 	This chapter will describe all the experiments that validate the models constraints.
 	\include{experiments/experiments}
 	
 	\chapter{Conclusions}
+	This chapter will...
+	\include{conclusion}
 	
-	\bibliographystyle{plain}
-	\bibliography{references}
+	%\bibliographystyle{plain}
+	%\bibliography{references.bib}
+	\include{references.tex}
 	
 	\backmatter
 	

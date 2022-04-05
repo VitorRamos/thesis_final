@@ -1,5 +1,5 @@
 
-\section{The impact of best-choice execution time slots partition of HPC applications on energy-saving strategies}
+\section{Model with phases}
 
 The energy efficiency of HPC can be achieved through dynamic workload planning. Dynamic scaling of frequency and voltage DVFS is the main energy efficiency technique to save power. The scaling algorithms can operate dynamically depending on the CPU workload. However, the required IT resources and workload vary throughout the applications' execution. The division of this workload directly impacts the resulting performance and the complexity of dynamic scaling algorithms. This work analyses the impact on the energy efficiency of different dynamic workload partitioning techniques, based on time division of allocated resources and DVFS. We evaluate the trade-off between the best time intervals partition and the overhead impact of dynamic scheduling techniques. We propose the optimal partition of application executions in time intervals providing the most energy efficient execution parameters, workload, frequency and number of cores, for each time interval.
 
@@ -90,7 +90,7 @@ Data, power samples, can be gathered by running the application in several possi
 To analyse the impact of configurations and identify optimal time-intervals, phases, we propose an integrator, which computes the energy on an interval for a given configuration, and a reference, a brute force test of all possible combinations. The integrator has order zero, and computers the energy between two timestamps, as shown in the figure \ref{fig:zero_order}, where the red and yellow parts area are the energy value.
 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{phases/figures/zero_order.png}
     \caption{Power vs time intervals for a given application. The energy associated area is colored.}
@@ -171,7 +171,7 @@ Using the objective function, brute force can identify the optimal energy on eac
 
 In order to validate the approach, HPC benchmarks where chosen, 13 applications from PARSEC 3.0, HPC, and Openmc.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \includegraphics[width=\columnwidth]{fingerprint/figures/energy_per_phase.png}
     \caption{Relative energy vs number of phases using 13 applications from PARSEC 3.0, HPC, and Openmc benchmarks. Energy compared to the single-phase optimal configuration.}
     \label{fig:relative_energy}
@@ -204,12 +204,12 @@ We observed a similar behavior just considering frequency control energy optimis
 \end{figure}
 
 The images below show the phases for all applications:
-\begin{figure}[h]
+\begin{figure}[H]
 \includegraphics[width=\columnwidth]{phases/figures/phase_division_35.png}
 \end{figure}
 In most applications, we can see a pattern of 3 phases wich for this applications are generally, and setup phase where it loads data from the disk, a computation phase where the data is processed, and a finalization phase where data is written back to the disk or display to the user.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \includegraphics[width=\columnwidth]{phases/figures/phase_division_3.png}
 \end{figure}
 Plotting for 3 phases, we can observe that better.

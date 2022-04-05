@@ -1,19 +1,4 @@
-%\author{ \parbox{3 in}{\centering Huibert Kwakernaak*
-%         \thanks{*Use the $\backslash$thanks command to put information here}\\
-%         Faculty of Electrical Engineering, Mathematics and Computer Science\\
-%         University of Twente\\
-%         7500 AE Enschede, The Netherlands\\
-%         {\tt\small h.kwakernaak@autsubmit.com}}
-%         \hspace*{ 0.5 in}
-%         \parbox{3 in}{ \centering Pradeep Misra**
-%         \thanks{**The footnote marks may be inserted manually}\\
-%        Department of Electrical Engineering \\
-%         Wright State University\\
-%         Dayton, OH 45435, USA\\
-%         {\tt\small pmisra@cs.wright.edu}}
-%}
-
-\section{An Accurate Tool for Modeling, Fingerprinting, Comparison, and Clustering of Parallel Applications Based on Performance Counters}
+\section{Fingerprint tool}
 The analysis of application performance is essential to better exploit its potential on High-Performance Computing (HPC) architectures. Access to performance counters, available in modern processors, allows collecting key information about program behavior to provide the most appropriate HPC execution strategy.
 In this context, we have developed an accurate tool based on performance counters, which facilitates modeling, fingerprinting, behavior comparison and clustering of applications.
 It provides a high-level Python API for accessing and configuring performance counters; while execution and counters data gathering is  performed by a C++ module to reduce overhead. 
@@ -25,46 +10,46 @@ This clustering facilitated the identification of applications with similar and 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{INTRODUCTION}
+\subsection{Introduction}
 
 Hardware Performance Counters are special registers available on most modern processors capable of counting micro-architectural events such as instructions executed, cache-hit, branches miss-predicted, energy estimation and much more.  In new architectures, there are hundreds of hardware events that can be monitored, and more are added to each new generation. 
 Performance counters were initially introduced for debugging, but since then they have provided a lot of useful information about running applications without slowing down the execution.
-They have been used in several other areas, such as software profiling \cite{Melo2010, Kufrin2005, Knupfer2011}, CPU power modeling \cite{Zamani2012ASystems}, dynamic frequency and voltage scaling, vulnerability research and malware defense \cite{Demme2013OnCounters}.
+They have been used in several other areas, such as software profiling \cite{Melo2010Perf, Kufrin2005Perfsuite, Knupfer2011Scorep}, CPU power modeling \cite{Zamani2012ASystems}, dynamic frequency and voltage scaling, vulnerability research and malware defense \cite{Demme2013OnCounters}.
 
 %\cite{Geimer2010, Geimer2010TheArchitecture, Shende2006TheSystem}
 
 Exploiting Performance Monitoring Units (PMU) requires an intimate knowledge of the micro-architecture and kernel API, as well as an awareness of an ever increasing complexity. 
-Otherwise, the measurement performance and accuracy will be seriously affected. Although many tools have been developed using performance counters, programmable interfaces capable of providing good accuracy are still lacking, especially for high-level programming languages. Indeed, apart from PAPI \cite{Weaver2013, Mucci1999} and Perfmon \cite{EranianPerfmon2Interface, Eranian2005TheSpecification} there are only a few APIs allowing access to these counters, and many others are poorly documented, unstable, or designer for a specific purpose.
+Otherwise, the measurement performance and accuracy will be seriously affected. Although many tools have been developed using performance counters, programmable interfaces capable of providing good accuracy are still lacking, especially for high-level programming languages. Indeed, apart from PAPI \cite{Weaver2013Non-determinismImplementations, Mucci1999PAPI} and Perfmon \cite{Eranian2008Perfmon2} there are only a few APIs allowing access to these counters, and many others are poorly documented, unstable, or designer for a specific purpose.
 
 Performance metrics may have different definitions and programming interfaces on different platforms. 
 Therefore, besides gathering information, post-processing modules are also needed. 
-Such modules will overcome the lack of precision of counters on some architectures, as indicated in \cite{Weaver2008,Weaver2013a,Das2019SoK:Security}. 
+Such modules will overcome the lack of precision of counters on some architectures, as indicated in \cite{Weaver2008CanTrusted,Weaver2013Non-determinismImplementations,Das2019SoK:Security}. 
 Events that must be precise and deterministic (such as retired instructions) show a variation on run-to-run and over-count on x86\_64 machines, even in strictly controlled environments. These effects are almost always non-intuitive to casual users and pose problems when strict determinism is desirable. 
 
 To meet the above mentioned requirements, our strategy combines low-level, efficient and accurate access to PMUs, facilitated by high-level programmable interfaces. This allows the user to perform all configurations and post-processing in Python,  while the underlined architecture details and information gathering are supported by a C++ module, thus preserving accuracy with limited overhead. 
 In order to understand the behavior of programs for future comparisons and classification, the proposed tool makes another contribution: the ability to fingerprint and cluster applications.
 
-The definition of reference parameters, such as input size of programs, and performance measures uniformization, allow us to cluster benchmarks such as PolyBench \cite{PolyBench/C3.2}, a collection of numerical computations with static control flow extracted from various application domains, with interesting results. 
+The definition of reference parameters, such as input size of programs, and performance measures uniformization, allow us to cluster benchmarks such as PolyBench \cite{Gonzalez2021PolyBench}, a collection of numerical computations with static control flow extracted from various application domains, with interesting results. 
 In addition to contributing to the standardization of kernel execution and monitoring, this clustering has identified applications with similar and comparable behavior in terms of input size, data transfer and access, resources used and computation; which facilitates the creation of test sets for a given environment, according to specific measurement parameters. 
 
 The rest of this article is organized as follows. subsection 2 provides the related work regarding tools available and requirements. subsection 3 presents the performance counters and motivation. subsection 4 presents our clustering and application analysis tool, architecture and components. subsection 5 shows evaluation results: the comparison of existing API and the clustering of the PolyBench benchmarks. Finally, subsection 8 concludes this article.
 
-\subsection{RELATED WORK}
+\subsection{Related Work}
 
 There are only a few APIs allowing access to performance counters.
-PAPI \cite{Weaver2013, Mucci1999}, one of the most used libraries for accessing hardware performance counters, was originally developed to provide portable access to the counters found on a diverse collection of modern microprocessors. Rather than learning and writing a new performance infrastructure every time it is ported to a new machine. Measurement code can be written in the PAPI API, which hides the underlying interface.  
+PAPI \cite{Weaver2013Non-determinismImplementations, Mucci1999PAPI}, one of the most used libraries for accessing hardware performance counters, was originally developed to provide portable access to the counters found on a diverse collection of modern microprocessors. Rather than learning and writing a new performance infrastructure every time it is ported to a new machine. Measurement code can be written in the PAPI API, which hides the underlying interface.  
 PAPI was developed on C and a few non-official libraries were ported to Python. The main problem we found using PAPI was the Python version of has a considerable overhead, it also does not have an easy way to create raw events or low-level control without having to use a special driver. And as our tests will show later, counters sampling over time does not produce good results either.
 
 There are also available a set of interfaces using their own drivers, mainly because the counters are only accessible in kernel mode (ring 0) to control the events for which the counter must be started or stopped. Some events are fixed and others require the development of a dedicated kernel driver. 
 
-Perfctr \cite{MikaelPettersson.TheInterface.} supports per-kernel-thread and system-wide monitoring for most major processor architectures. It is distributed as a stand-alone kernel patch. The interface is mostly used by tools built on top of the PAPI performance toolkit. 
+Perfctr \cite{Nikolaev2011Perfctr} supports per-kernel-thread and system-wide monitoring for most major processor architectures. It is distributed as a stand-alone kernel patch. The interface is mostly used by tools built on top of the PAPI performance toolkit. 
 
-The Intel VTUNE \cite{IntelCorp.TheAnalyzer.} performance analyzer comes with its own kernel interface, implemented by an open-source driver. The interface supports system-wide monitoring only and is very specific to the needs of the tool.
+The Intel VTUNE \cite{Intel2021Vtune} performance analyzer comes with its own kernel interface, implemented by an open-source driver. The interface supports system-wide monitoring only and is very specific to the needs of the tool.
 
-The problem with the approach of a tool and its own kernel interface is dangerous because, as mentioned on \cite{EranianPerfmon2Interface}, there is clearly code duplication, but more importantly, there is no coordination between the various interfaces that may coexist sharing access to the same PMU resource. To solve this problem, Perfmon2 \cite{Eranian2005TheSpecification} offers a standard interface that all tools can use. Unfortunately, it has not been widely adopted, just supported by a few architectures like the IA64. Instead, Linux comes up with a performance counters subsystem which provides a complete set of configurations.
+The problem with the approach of a tool and its own kernel interface is dangerous because, as mentioned on \cite{Eranian2008Perfmon2}, there is clearly code duplication, but more importantly, there is no coordination between the various interfaces that may coexist sharing access to the same PMU resource. To solve this problem, Perfmon2 \cite{Eranian2008Perfmon2} offers a standard interface that all tools can use. Unfortunately, it has not been widely adopted, just supported by a few architectures like the IA64. Instead, Linux comes up with a performance counters subsystem which provides a complete set of configurations.
 
 
-\subsection{READING PERFORMANCE COUNTERS}
+\subsection{Reading Performance Counters}
 
 Although hundreds of events are available for monitoring, only a limited number of counters can be used simultaneously.
 Therefore, the events to be monitored should be carefully selected and configured using the available counters.
@@ -85,18 +70,18 @@ All events are seen as 64-bit virtual counters, regardless of the width of the u
 They are accessible via special file descriptors, one file descriptor per virtual counter, opened via the perf\_event\_open() system call.  %These system call do not use rdpmc, but rdpmc is not necessarily faster than other methods of reading event values.
 Counter events can be processed by interrupt, polling or on time. The interrupt operates by hooking a user-defined function to a specified event, such as a counter overflow, and whenever this event happens, a signal will be generated passing the control to the designated handler function. With polling, whenever an event occurs on the system, the counter value is queued by the operating system and the user can read from this queue using a system call. The last option is to sample over time reading counters every n second.
 
-Ideal hardware performance counters provide exact deterministic results. Real-world PMU implementations do not always live up to this ideal \cite{Weaver2008, Weaver2013a, Das2019SoK:Security, McGuire2009}. Events that should be exact and deterministic (such as the number of executed instructions) show run-to-run variations and over counts on x86 64 machines, even when running in strictly controlled environments. 
+Ideal hardware performance counters provide exact deterministic results. Real-world PMU implementations do not always live up to this ideal \cite{Weaver2008CanTrusted, Weaver2013Non-determinismImplementations, Das2019SoK:Security, McGuire2009AnalysisKernel}. Events that should be exact and deterministic (such as the number of executed instructions) show run-to-run variations and over counts on x86 64 machines, even when running in strictly controlled environments. 
 These effects are non-intuitive to casual users and cause difficulties when strict determinism is desirable, such as when implementing deterministic replay or deterministic threading libraries. 
 Because of that, we have implemented a methodology to reduce the noise and over counts on performance counters.
 
 
-\subsection{IMPLEMENTATION}
+\subsection{Implementation}
 
 %This module provide a high-level abstraction API to Linux perf events without overhead while executing
 
 This tool is composed of 5 modules the are Profiler, Events, Workload, Analyzer and libpfm4. 
 The Workload and libpfm4 module are developed on C/C++ and interfaced with python using Python C API with SWIG (a software development tool to connects programs written in C/C++ with a variety of high-level programming languages). 
-The libpfm4 module, developed by \cite{Eranian2008}, is used as an auxiliary library.
+The libpfm4 module, developed by \cite{Eranian2008Perfmon2}, is used as an auxiliary library.
 
 %The main features that this library provide is a precise synchronous start the application and counter the event, a low overhead on sampling the events on time and an easy way to find and configure event in groups or standalone. 
 
@@ -249,275 +234,6 @@ Finally, we use the Savgol filter \cite{Luo2005PropertiesDifferentiators} in ord
     \label{fig:filtering}
 \end{figure}
 
-\subsection{RESULTS}
-
-In this subsection, we first show the comparison between our tool and others already established, as well as the clustering process.
-
-\subsubsection{ACCURACY COMPARISON}
-
-% \begin{table*}[h]
-% \centering
-% \caption{Average}
-% \begin{tabular}{|c|c|c|c|c|c|c|}
-% \hline
-% Counter                                 & Pined values & Linux API   & PAPI      & PAPI Python & Perf tool   & MyPerf      \\ \hline
-% INSTRUCTIONS\_RETIRED                  & 226990030    & 227000691   & 227000620 & 225901249   & 227000572   & 227000650   \\ \hline
-% BRANCH\_INSTRUCTIONS\_RETIRED          & 9240000      & 9250617     & 9250566   & 9239617     & 9250552     & 9250501     \\ \hline
-% BR\_INST\_RETIRED:CONDITIONAL          & 8220000      & 8220000     & 8220000   & 8209717     & 8220000     & 8220000     \\ \hline
-% MEM\_UOP\_RETIRED:ANY\_LOADS           &              & 2484182672  &           &             & 2484383940  & 2484155029  \\ \hline
-% MEM\_UOP\_RETIRED:ANY\_STORES          &              & 189962002   &           &             & 189961539   & 189961321   \\ \hline
-% UOPS\_RETIRED:ANY                      &              & 12291082129 &           &             & 12290811038 & 12290901997 \\ \hline
-% PARTIAL\_RAT\_STALLS:MUL\_SINGLE\_UOP  &              & 600878      &           &             & 600151      & 600330      \\ \hline
-% ARITH:FPU\_DIV                         &              & 5801446     &           &             & 5801000     & 5800977     \\ \hline
-% FP\_COMP\_OPS\_EXE:X87                 &              & 48785528    &           &             & 48784834    & 48786021    \\ \hline
-% INST\_RETIRED:X87                      &              & 17200008    &           &             & 17200008    & 17200007    \\ \hline
-% FP\_COMP\_OPS\_EXE:SSE\_SCALAR\_DOUBLE &              & 5401694     &           &             & 5401842     & 5401679     \\ \hline
-% \end{tabular}
-% \label{tab:mean}
-% \end{table*}
-
-% \begin{table*}[h]
-% \centering
-% \caption{Standard deviation}
-% \begin{tabular}{|c|c|c|c|c|c|}
-% \hline
-% Counter                                    & Linux API & PAPI & PAPI Python & Perf tool & MyPerf \\ \hline
-% INSTRUCTIONS\_RETIRED                  & 396       & 133  & 337763      & 110       & 175    \\ \hline
-% BRANCH\_INSTRUCTIONS\_RETIRED          & 297       & 208  & 8485        & 379       & 91     \\ \hline
-% BR\_INST\_RETIRED:CONDITIONAL          & 0         & 0    & 3383        & 0         & 0      \\ \hline
-% MEM\_UOP\_RETIRED:ANY\_LOADS           & 37399     &      &             & 39217     & 38953  \\ \hline
-% MEM\_UOP\_RETIRED:ANY\_STORES          & 1513      &      &             & 1035      & 687    \\ \hline
-% UOPS\_RETIRED:ANY                      & 345246    &      &             & 335832    & 333298 \\ \hline
-% PARTIAL\_RAT\_STALLS:MUL\_SINGLE\_UOP  & 1222      &      &             & 252       & 521    \\ \hline
-% ARITH:FPU\_DIV                         & 1760      &      &             & 1621      & 1544   \\ \hline
-% FP\_COMP\_OPS\_EXE:X87                 & 1283      &      &             & 1920      & 3311   \\ \hline
-% INST\_RETIRED:X87                      & 4         &      &             & 4         & 3      \\ \hline
-% FP\_COMP\_OPS\_EXE:SSE\_SCALAR\_DOUBLE & 1547      &      &             & 3259      & 2097   \\ \hline
-% \end{tabular}
-% \label{tab:std}
-% \end{table*}
-
-\begin{table*}[h]
-\centering
-\caption{Comparison}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-\hline
-\multicolumn{6}{|c|}{Average*$10^{-6}$} & \multicolumn{4}{c|}{Standard deviation}\\ \hline
-Counters & \begin{tabular}{c}Pined\\values\end{tabular} & \begin{tabular}{c}Linux\\API\end{tabular} & PAPI & \begin{tabular}{c}PAPI\\Python\end{tabular} & MyPerf  & \begin{tabular}{c}Linux\\API\end{tabular} & PAPI & \begin{tabular}{c}PAPI\\Python\end{tabular} & MyPerf \\ \hline
-INSTRUCTIONS\_RETIRED                  & 226.99       & 227       & 227  & 225.9       & 227     & 396       & 133  & 337763      & 175    \\ \hline
-BRANCH\_INSTRUCTIONS\_RETIRED          & 9.24         & 9.25      & 9.25 & 9.24        & 9.25    & 297       & 208  & 8485        & 91     \\ \hline
-BR\_INST\_RETIRED:CONDITIONAL          & 8.22         & 8.22      & 8.22 & 8.21        & 8.22    & 0         & 0    & 3383        & 0      \\ \hline
-MEM\_UOP\_RETIRED:ANY\_LOADS           &              & 2484.18   &      &             & 2484.16 & 37399     &      &             & 38953  \\ \hline
-MEM\_UOP\_RETIRED:ANY\_STORES          &              & 189.96    &      &             & 189.96  & 1513      &      &             & 687    \\ \hline
-UOPS\_RETIRED:ANY                      &              & 12291.08  &      &             & 12290.9 & 345246    &      &             & 333298 \\ \hline
-PARTIAL\_RAT\_STALLS:MUL\_SINGLE\_UOP  &              & 0.6       &      &             & 0.6     & 1222      &      &             & 521    \\ \hline
-ARITH:FPU\_DIV                         &              & 5.8       &      &             & 5.8     & 1760      &      &             & 1544   \\ \hline
-FP\_COMP\_OPS\_EXE:X87                 &              & 48.79     &      &             & 48.79   & 1283      &      &             & 3311   \\ \hline
-INST\_RETIRED:X87                      &              & 17.2      &      &             & 17.2    & 4         &      &             & 3      \\ \hline
-FP\_COMP\_OPS\_EXE:SSE\_SCALAR\_DOUBLE &              & 5.4       &      &             & 5.4     & 1547      &      &             & 2097   \\ \hline
-\end{tabular}
-}
-\label{tab:counters}
-\end{table*}
-
-To validate the tool, we compared the results of the counters obtained with different APIs. 
-We used the hand-crafted assembly benchmark from \cite{Weaver2013a}, designed to test determinism and accuracy of PMUs.
-We compared the values obtained from the Linux API, PAPI on C and PAPI on Python. 
-The events used for this comparison were instructions retired, branch instructions, memory read, memory load, and arithmetic operations.
-We ran the benchmark 30 times and calculated the mean and standard deviation as shown in table \ref{tab:counters}. Some events could not be measured using PAPI because the tool does not accept raw events and there are no equivalent events.
-
-Since the benchmark was hand-crafted with assembly, we know exactly the value for some counter events. 
-For this reason, the number of instructions, branch instructions, and conditional branch are pin. However, some other events are architecture-specific and there is no pined value. 
-In the latter case, we can still compare to the Linux API, which should be closest to the reality.
-
-The differences using the Linux low-level API, PAPI, and our tool are negligible (the average percentage distance is less than 0.01\% in all the cases). 
-As expected, PAPI on Python had the largest difference (with an average distance of 0.25\%) mainly due to an unsynchronized start that resulted in the loss of some instructions at the beginning of the execution. 
-This can be an important problem if the application contains a small number of instructions.
-
-The standard deviation of the 30 executions shows that our tool has the smallest variation on a run-to-run on most events. On the contrary, PAPI on Python shows a big variation compared to the others.
-
-\subsubsection{CLUSTERING}
-
-To cluster applications first we need to have a way to compare two programs, for that we define a new variable that tries to compute a fingerprint to the program, this variable has to look similar when we execute the same program with different conditions and inputs. Thinking in the simplest model of a program as a Turing machine as everything can be done with a tap of memory and set of rules we empirically define the variable input size as described on the equation \ref{eq:input_size}. On real computers this is not too far from reality, most of the computations and input and output operations somehow pass through the memory, so analyzing the relationship of the total number of instructions and memory instructions can give us a good fingerprint.
-
-\begin{equation}
-    I_{sz} = \frac{I}{I_{m}} \\
-    \label{eq:input_size}
-\end{equation}
-
-Where $I_{sz}$ we called input size, $I$ the number of instructions executed, $I_m$ number of memory instructions execute. We observe that this variable demonstrate to have the proprieties that we are looking for, produce similar results to the same program with different input size, and environment. This can be used to identify programs but also to see the similarities between different applications.
-
-To compute the distance between two programs we use the Canberra metric \cite{Jurman2009CanberraLists}, described on the equation \ref{eq:canberra}.
-
-\begin{equation}
-    d(p,q)= \sum_{i=1}^{n}{\frac{|p_i-q_i|}{|p_i|+|q_i|}}
-    \label{eq:canberra}
-\end{equation}
-
-Where $p$ and $q$ are n-dimensional vectors.
-
-We compute the input size for all 30 applications of the Polybench with 3 different inputs. Running each program 15 times, with a sampling rate of 0.01 seconds collecting the total number of instruction, number of loads and write instructions, number of floating point operations, besides some software counters. After applying the post-processing to the data collected we compute the input size and perform a Hierarchical clustering using the linkage method of Ward \cite{Murtagh2011WardsAlgorithm}, that minimizes the total within-cluster variance. The results of the clustering can be seen on the figure \ref{fig:sping_force_is} and on the dendrogram on figure \ref{fig:dendograma_input_size}.
-
-%The exact HPCs was:
-%PERF_COUNT_HW_INSTRUCTIONS,
-%MEM_UOPS_RETIRED:ALL_LOADS,
-%MEM_UOPS_RETIRED:ALL_STORES,
-%FP_ARITH_INST_RETIRED:SCALAR
-
-\begin{figure*}[h]
-    \centering
-    \includegraphics[width=\textwidth]{fingerprint/figures/dendograma_input_size.png}
-    \caption{Dendrogram}
-    \label{fig:dendograma_input_size}
-\end{figure*}
-
-From this dendrogram, we can have an idea of how close two applications are. We choose the number of clusters that maximize the number of hits of the same program with different input sizes on the same cluster, in this case, was 5 clusters.
-
-It was observed that as input size grows the program behavior tends to a specific curve, but for small input sizes some have variation, so in some cases, the same program has been classified in more than one cluster. This can also happen if specific parts of the program are triggered with specific inputs, in which case it will also belong to more than one cluster.
-
-In order to have an overall classification of each program, we can pick up the frequency in which each appeared in the clusters and classified it in the cluster in which it appeared more often. In this case, the clusters are:
-
-\begin{itemize}
-    \item Cluster 1: 2mm, 3mm, cholesky, correlation, covariance, floyd-warshall, gemm, gramschmidt, lu, ludcmp, nussinov, symm
-    
-    \item Cluster 2: deriche, doitgen, syrk
-    
-    \item Cluster 3: adi, fdtd-2d, jacobi-2d, syr2k
-    
-    \item Cluster 4: atax, bicg, durbin, gemver, gesummv, mvt, trisolv, trmm
-    
-    \item Cluster 5: heat-3d, seidel-2d
-\end{itemize}
-
-On the figure, \ref{fig:sping_force_is} we display the clusters using the spring force algorithm where each program with a specific input is a node and the edge weight is the Canberra distance. To a better visualization, the name of the inputs was replaced by numbers, the EXTRALARGE is 3, LARGE 2 and MEDIUM 1. 
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{fingerprint/figures/graph_input_size.png}
-    \caption{Spring force of Canberra distance}
-    \label{fig:sping_force_is}
-\end{figure}
-
-The figure above shows a different way to observe in a reduced space the distance between clusters and applications and how they are organized. From this graph, we see that clustering it's well partitioned and we can clearly separate each cluster. It is also interesting to note that the applications of the cluster formed by the circle symbol are more separated, which may indicate that they were classified in this way because they did not fit into any other cluster.
-
-% \begin{figure*}[t]
-%     \begin{subfigure}{\textwidth}
-%         \includegraphics[width=\textwidth]{fingerprint/figures/dendograma_input_size.png}
-%     \end{subfigure}
-%     \\
-%     \begin{subfigure}{\textwidth}
-%         \includegraphics[width=\textwidth]{fingerprint/figures/dendograma_floating.png}
-%     \end{subfigure}
-%     %and so on
-% \end{figure*}
-
-To have an idea of how the behavior of the variable input size for each clusters is, it was plotted for the applications of clusters 1 and 2 shown on the figures \ref{fig:c1_input_size_0}, \ref{fig:c1_input_size_1}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{fingerprint/figures/cluster_input_0.png}
-    \caption{Input size - Cluster 1}
-    \label{fig:c1_input_size_0}
-\end{figure}
-
-From these figures, we can have an idea of what behavior was classified as the same class. On cluster 1 on the figure \ref{fig:c1_input_size_0} all applications showed the same behavior with approximately the same amplitude.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{fingerprint/figures/cluster_input_1.png}
-    \caption{Input size - Cluster 2}
-    \label{fig:c1_input_size_1}
-\end{figure}
-
-On figure \ref{fig:c1_input_size_1} we observe that curves that have similar shape regardless of scale on vertical and horizontal axis have also been classified as the same clusters. This is the wanted comportment for the classification because we are only interested in the overall shape of the curve.
 
 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=\textwidth]{fingerprint/figures/cluster_input_4.png}
-%     \caption{Input size - Cluster 3}
-%     \label{fig:c1_input_size_2}
-% \end{figure}
 
-% To conclude this study we also clustering applications by its floating point behavior. For that we only use the counter correspondent to floating point operations. The figure \ref{fig:dendogram_fp} shows the dendrogram and the \ref{fig:sping_force_fp} the spring force graph plot.
-
-% \begin{figure*}[h]
-%     \includegraphics[width=\textwidth]{fingerprint/figuresdendograma_floating.png}
-%     \caption{Dendrogram}
-%     \label{fig:dendogram_fp}
-% \end{figure*}
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=\textwidth]{fingerprint/figures/graph_floating2.png}
-%     \caption{Spring force of Canberra distance}
-%     \label{fig:sping_force_fp}
-% \end{figure}
-
-% The figures \ref{fig:cluster_fp1},\ref{fig:cluster_fp2},\ref{fig:cluster_fp3} show the behavior on the same cluster for the float point operations. For this classification the number of clusters was 8.
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=\textwidth]{fingerprint/figures/cluster_fp_0.png}
-%     \caption{Floating point - Cluster 1}
-%     \label{fig:cluster_fp1}
-% \end{figure}
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=\textwidth]{fingerprint/figures/cluster_fp_4.png}
-%     \caption{Floating point - Cluster 2}
-%     \label{fig:cluster_fp2}
-% \end{figure}
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=\textwidth]{fingerprint/figures/cluster_fp_5.png}
-%     \caption{Floating point - Cluster 3}
-%     \label{fig:cluster_fp3}
-% \end{figure}
-
-% Here we can also observed again that applications with the same shape were classified as the same clusters.
-
-\subsection{CONCLUSIONS}
-
-%\cite{Processors2012, Gregg2017}
-From the results, we observe that the API present overhead similar or lower to other low-level APIs, with the advantage of being in high abstraction and simplified configuration with a few lines of code, is possible to configure and gather counter data.
-
-The tool developed provide also provided a way to fingerprint programs and compute similarities between different programs or the same program with different inputs. This can be useful to reduce applications spaces for benchmarks as was done in Polybench clustering but also to analyze the behavior of a parameter providing insights to the programmer to find a possible bottleneck.
-
-We also provide a precise definition to input size that made possible fingerprint the programs, but it also can help programmers of benchmark applications to better create inputs with more precise growth of a particular parameter.
-
-%\subsection{FUTURE WORK}
-%
-%We pretend to use this tool to create a data set of applications behavior and automatically classify any program as belonging to a cluster or a set of clusters. The idea is to have a set of clusters that can describe most applications in this way we can know specific behaviors of the applications. This can be applied to various areas such as voltage scaling and frequency of the processor, once knowing the behavior of a particular program we can have an idea of what is the best strategy to control the frequency in order to save energy or increase performance.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\subsection{APPENDIX}
-
-% \begin{figure*}[h]
-%     \centering
-%     \includegraphics[width=\textwidth]{dendograma_input_size.png}
-%     \caption{Dendogram input size}
-%     \label{fig:dendograma_input_size}
-% \end{figure*}
-
-% \begin{figure*}[h]
-%     \centering
-%     \includegraphics[width=\textwidth]{dendograma_floating.png}
-%     \caption{Dendogram floating}
-%     \label{fig:dendograma_floating}
-% \end{figure*}
-
-%This tool and all the analysis are available on github: \url{github.com/VitorRamos/performance_features}
-
-% \begin{lstlisting}[language=bash]
-% pip install performance-features
-% \end{lstlisting}
-
-%\subsection{ACKNOWLEDGMENT}
-%
-%This research was developed in the super-computing centers of the University of MONS in collaboration with the center of the Federal University of Rio Grande do Norte.
