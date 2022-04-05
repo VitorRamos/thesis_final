@@ -1,98 +1,38 @@
-% Stanford University PhD thesis style -- modifications to the report style
-% This is unofficial so you should always double check against the
-% Registrar's office rules
-% See http://library.stanford.edu/research/bibliography-management/latex-and-bibtex
-% 
-% Example of use below
-% See the suthesis-2e.sty file for documentation
-%
-\documentclass{report}
+\documentclass[
+papersize=a4,
+pagelayout=default,
+fontname=latinmodern,
+fontsize=11pt,
+twoside,
+final,
+faculty=fpms
+]{umons-Thesis}
 
-\usepackage[breakable]{tcolorbox}
-\usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+% Styles
+\headstyles{umons}
+\pagestyle{umons}
 
-\usepackage{iftex}
-\ifPDFTeX
-\usepackage[T1]{fontenc}
-\usepackage{mathpazo}
-\else
-\usepackage{fontspec}
-\fi
 
-% Basic figure setup, for now with no caption control since it's done
-% automatically by Pandoc (which extracts ![](path) syntax from Markdown).
-\usepackage{graphicx}
-% Maintain compatibility with old templates. Remove in nbconvert 6.0
-\let\Oldincludegraphics\includegraphics
-% Ensure that by default, figures have no caption (until we provide a
-% proper Figure object with a Caption API and a way to capture that
-% in the conversion process - todo).
-\usepackage{caption}
-\DeclareCaptionFormat{nocaption}{}
-\captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
-
-\usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
-\adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+\usepackage[main=english]{babel}
+\usepackage[autostyle=true]{csquotes}
+\usepackage[babel=true]{microtype}
 \usepackage{float}
-\floatplacement{figure}{H} % forces figures to be placed at the correct location
-\usepackage{xcolor} % Allow colors to be defined
-\usepackage{enumerate} % Needed for markdown enumerations to work
-\usepackage{geometry} % Used to adjust the document margins
-\usepackage{amsmath} % Equations
-\usepackage{amssymb} % Equations
-\usepackage{textcomp} % defines textquotesingle
-% Hack from http://tex.stackexchange.com/a/47451/13684:
-\AtBeginDocument{%
-	\def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
-}
-\usepackage{upquote} % Upright quotes for verbatim code
-\usepackage{eurosym} % defines \euro
-\usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
-\usepackage{fancyvrb} % verbatim replacement that allows latex
-\usepackage{grffile} % extends the file name processing of package graphics 
-% to support a larger range
-\makeatletter % fix for grffile with XeLaTeX
-\def\Gread@@xetex#1{%
-	\IfFileExists{"\Gin@base".bb}%
-	{\Gread@eps{\Gin@base.bb}}%
-	{\Gread@@xetex@aux#1}%
-}
-\makeatother
-
-% The hyperref package gives us a pdf with properly built
-% internal navigation ('pdf bookmarks' for the table of contents,
-% internal cross-reference links, web links for URLs, etc.)
-\usepackage{hyperref}
-% The default LaTeX title has an obnoxious amount of whitespace. By default,
-% titling removes some of it. It also provides customization options.
-\usepackage{titling}
-\usepackage{longtable} % longtable support required by pandoc >1.10
-\usepackage{booktabs}  % table support for pandoc > 1.12.2
-\usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
-\usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
-% normalem makes italics be italics, not underlines
-\usepackage{mathrsfs}
-\usepackage{outlines}
-
-% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
-\usepackage{cite}
-\usepackage{amsmath,amssymb,amsfonts}
-\usepackage{algorithmic}
 \usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{nth}
-\usepackage{todonotes}
-\usepackage{url}
-\usepackage{xcolor}
-\usepackage{textcomp}
-\usepackage{float}
 \usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{mathtools}
+\usepackage{siunitx}
+\sisetup{%
+	binary-units = true,%	loads units for binary data (\bit, \byte)
+}
+\usepackage[%
+hidelinks,%				hides links (removing color and border)
+pdfusetitle,%			uses the content of \author{}... for metadata
+pdfdisplaydoctitle,%	displays document title instead of file name in title bar
+]{hyperref}
 \usepackage{cleveref}
+\usepackage{outlines}
 \usepackage{listings}
-
-
-%\usepackage[caption=false,font=footnotesize]{subfig}
-%\usepackage[export]{adjustbox}
 
 \lstset { %
 	language=C++,
@@ -101,104 +41,88 @@
 }
 
 \newcommand*\rot{\rotatebox{90}}
-
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
 		T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-	
-%\usepackage{suthesis-2e}
-%\dept{Computer Science}
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
 
-\usepackage[fpms]{umons-coverpage}
-\umonsAuthor{Vitor Ramos Gomes \textsc{SILVA}}
-\umonsTitle{Energy aware high-performance computing}
-\umonsDocumentType{A DISSERTATION SUBMITTED TO THE ELECTRONICS AND MICROELECTRONICS DEPARTMENT OF MONS UNIVERSITY IN PARTIAL FULFILLMENT OF THE REQUIREMENTS FOR THE DEGREE OF DOCTOR IN ENGINEERING SCIENCES AND TECHNOLOGY}
-%\umonsSupervisor{Supervisor\\ Carlos Alberto \textsc{VALDERRAMA}\\
-%				 Co-supervisor\\ Pierre \textsc{MANEBACK}}
-\umonsSupervisor{
- 		Thesis committee:\\
- 		Supervisor: Prof. Carlos Alberto \textsc{VALDERRAMA}\\
- 		Co-supervisor: Prof. Pierre \textsc{MANEBACK}\\
- 		Prof. Thierry \textsc{DUTOIT}\\
- 		Prof. Sidi \textsc{MAHMOUDI}\\
- 		Prof. Samuel \textsc{XAVIER-DE-SOUZA}
+%%        %%
+% DOCUMENT %
+% ======== %
+
+
+% Metadata
+% --------
+
+\author{Vitor \textsc{Ramos Gomes da Silva}}
+
+\date{\today}
+
+\title{Title}
+%\title{My very long two-line PhD thesis title}
+%\title{My supra long PhD thesis title just to verify that nothing is broken because of a long title}
+
+\committeeMembers{%
+	Prof. Carlos Alberto \textsc{VALDERRAMA}, Supervisor\\
+	Prof. Pierre \textsc{MANEBACK}, Co-supervisor\\
+	Prof. Thierry \textsc{DUTOIT}, Chair\\
+	Prof. Sidi \textsc{MAHMOUDI}, Chair\\
+	Prof. Samuel \textsc{XAVIER-DE-SOUZA}, Chair 
 }
-\umonsDate{April 2021}
 
 
+
+% Text
+% ----
 
 \begin{document}
-%\title{Energy aware HPC}
-%\author{Vitor Ramos Gomes da Silva}
-%\principaladviser{Carlos Valderrama}
-%\coprincipaladviser{Pierre MANNEBACK}
-%\firstreader{Thierry DUTOIT}
-%\secondreader{Sidi MAHMOUDI}
-%\thirdreader{Samuel Xavier de Souza} %if needed
-% 
-%\beforepreface
-%\prefacesection{Preface}
-%%Second Phd Committee
-%\prefacesection{Acknowledgments}
-%%I would like to thank...
-%\afterpreface
-
-\umonsCoverPage
-
-%\section*{Acknowledgments}
-%\vspace{1cm}
-%\begin{center}
-%	...
-%\end{center}
-%\newpage
-
-\section*{Abstract}
-Energy consumption is a key to enable exascale High-performance Computing (HPC). Energy-optimized hardware and software combinations still could be inefficient if software operates poorly. 
-Software operation relies on dynamic scaling of frequency and voltage (DVFS) as well as dynamic power management (DPM), but none have priority information on the application, which leads to inefficient software operation. This work proposes an analytical model that can be used to estimate energy-optimal software operation. 
-This work proposes a new energy model that can be used as a basis to optimize DVFS and DPM, as well as to assess the contribution of parameters such as parallelism level and dynamic power to the energy consumption.
-Since in HPC, applications can run on multiple cores and associated frequencies, both of which can be controlled for most systems, the novelty of the model includes such parameters as well as the workload, two application parameters and three system parameters.
-
-\vspace{2cm}
-\textbf{Keywords :} Energy Model; Dynamic Frequency and Voltage Scaling; Dynamic Power Management; High Performance Computing
-\newpage
-
-\tableofcontents
-\newpage
-\listoffigures
-\newpage
-\listoftables
-\newpage
-
-\chapter{Introduction}
-
-\include{intro/intro}
-
-%\chapter{Approch}
-%\include{ch1/ch1}
-
-
-\chapter{Models}
-In this Section, the proposed power, performance and energy models are derived and validated
-\include{models/models}
-\include{model_analysis/model_analysis}
-
-\chapter{Optmizers}
-This chapter talks about the different types of optimizers.
-\include{optmizers/optmizers}
-\include{phases/phases}
-
-\chapter{Framework}
-This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
-\include{fingerprint/fingerprint}
-\include{pascalanalyzer/pascalanalyzer}
-
-\chapter{Experiments}
-This chapter will describe all the experiments that validate the models constraints.
-\include{experiments/experiments}
-
-
-%\appendix
-%\chapter{A Long Proof}
-
-\bibliographystyle{plain}
-\bibliography{references}
+	
+	\umonsThesisTitlePage
+	
+	
+	\frontmatter
+	
+	\begin{umonsThesisAbstract}
+		Energy consumption is a key to enable exascale High-performance Computing (HPC). Energy-optimized hardware and software combinations still could be inefficient if software operates poorly. 
+		Software operation relies on dynamic scaling of frequency and voltage (DVFS) as well as dynamic power management (DPM), but none have priority information on the application, which leads to inefficient software operation. This work proposes an analytical model that can be used to estimate energy-optimal software operation. 
+		This work proposes a new energy model that can be used as a basis to optimize DVFS and DPM, as well as to assess the contribution of parameters such as parallelism level and dynamic power to the energy consumption.
+		Since in HPC, applications can run on multiple cores and associated frequencies, both of which can be controlled for most systems, the novelty of the model includes such parameters as well as the workload, two application parameters and three system parameters.
+	\end{umonsThesisAbstract}
+	
+	% \vspace{2cm}
+	% \textbf{Keywords :} Energy Model; Dynamic Frequency and Voltage Scaling; Dynamic Power Management; High Performance Computing
+	
+	\tableofcontents*
+	\listoffigures*
+	\listoftables*
+	
+	
+	\mainmatter
+	
+	\chapter{Introduction}
+	
+	\include{intro/intro}
+	
+	\chapter{Proposed Models}
+	In this Section, the proposed power, performance and energy models are derived and validated
+	\include{models/models}
+	\include{phases/phases}
+	\include{optmizers/optmizers}
+	
+	\chapter{Framework}
+	This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
+	\include{fingerprint/fingerprint}
+	\include{pascalanalyzer/pascalanalyzer}
+	
+	\chapter{Results (model validation)}
+	This chapter will describe all the experiments that validate the models constraints.
+	\include{experiments/experiments}
+	
+	\chapter{Conclusions}
+	
+	\bibliographystyle{plain}
+	\bibliography{references}
+	
+	\backmatter
+	
+	
 \end{document}
