@@ -223,16 +223,24 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	The results show that up to 70\% of energy could be saved in the best scenario compared to the default Linux choice and 14\% on average.
 	We also compare the proposed model with standard machine-learning modeling concerning training overhead and accuracy. The results show that our approach generates about 10 times less energy overhead for the same level of accuracy.
 	\include{models/models}
-	\include{phases/phases}
 	%\include{optmizers/optmizers}
+	
+	\chapter{Energy-optimal configurations}
+	\include{optmization}
+	
+	\chapter{Phases}
+	Modelo no tempo
+	Fingerprint
+	Phases com modelo no tempo
+	\include{phases/phases}
+	
 	
 	\chapter{Framework}
 	This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
 	
 	\include{pascalanalyzer/pascalanalyzer}
 	\include{fingerprint/fingerprint}
-	
-	\chapter{Experiments and Results}
+
 	This chapter will describe all the experiments that validate the models constraints.
 	\include{experiments/experiments}
 	
@@ -240,9 +248,9 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	This chapter will...
 	\include{conclusion}
 	
-	%\bibliographystyle{plain}
-	%\bibliography{references.bib}
-	\include{references.tex}
+	\bibliographystyle{plain}
+	\bibliography{references.bib}
+	%\include{references.tex}
 	
 	\backmatter
 	

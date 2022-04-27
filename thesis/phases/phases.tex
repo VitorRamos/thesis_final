@@ -3,15 +3,15 @@
 
 The energy efficiency of HPC can be achieved through dynamic workload planning. Dynamic scaling of frequency and voltage DVFS is the main energy efficiency technique to save power. The scaling algorithms can operate dynamically depending on the CPU workload. However, the required IT resources and workload vary throughout the applications' execution. The division of this workload directly impacts the resulting performance and the complexity of dynamic scaling algorithms. This work analyses the impact on the energy efficiency of different dynamic workload partitioning techniques, based on time division of allocated resources and DVFS. We evaluate the trade-off between the best time intervals partition and the overhead impact of dynamic scheduling techniques. We propose the optimal partition of application executions in time intervals providing the most energy efficient execution parameters, workload, frequency and number of cores, for each time interval.
 
-\subsection{Introduction}
+\section{Introduction}
 Talk about the importance of energy efficiency.
 
-\subsection{Related work}
+\section{Related work}
 Some related work
 
-\subsection{Methodology}
+\section{Methodology}
 
-\subsubsection{Optimal energy configuration}
+\section{Optimal energy configuration}
 Splitting a program into phases, or time intervals with a selected set of execution parameters, has an impact on energy consumption. To find the ideal phase division, we need to compute the optimal energy configuration for a given number and duration of phases. For that, many different approaches could be applied, each having different trade-offs. 
 
 Using models ref [x], or a static analysis of the application, allows obtaining a very fast but less precise estimate. On the other hand, using the application and evaluating its behavior in each possible context would be a more reliable but too expensive method. Indeed, since the number of combinations grows exponentially, this is a very time consuming approach. Instead, our analysis approach will provide both, speed and precision. We will simply run the target application and collect performance data from every possible execution context. By context, we can consider, for instance, the frequency and/or number of cores. This data will then be used to analyse the behavior of phases in all possible combinations. For this, we assume that the number of instructions of the executed program is the same regardless of frequency and number of threads.
@@ -81,12 +81,12 @@ The extent of the hypotheses will later be validated, however, by taking advanta
 % I am trying to say here that we can split the program using a percentage of the time because the time is proportional to the number of executed instructions. If we complete x% of the time, that will be x% of instructions. This implies that we can resume and continue the program from any point ensuring that we executed all instructions. If we have a previous execution for each configuration, we can compute any combination with minimal error.
 
 
-\subsubsection{Data Collection}
+\section{Data Collection}
 Data, power samples, can be gathered by running the application in several possible context configurations. In a system with 32 cores that can run at 13 frequencies, we can have 416 (32*13) possible configurations. Power samples can be taken from dedicated sensors in the IPMI system [REF]. To avoid overload, a sample rate of 0.5 seconds is more than sufficient. Additionally, the behavior of an application can be affected by the workload, so it is also interesting to run applications with different inputs and assess their impact on the collected data [REF victor alex paper].
 
 % We can consider different input sizes as an new application...
 
-\subsubsection{The simulator}
+\section{The simulator}
 To analyse the impact of configurations and identify optimal time-intervals, phases, we propose an integrator, which computes the energy on an interval for a given configuration, and a reference, a brute force test of all possible combinations. The integrator has order zero, and computers the energy between two timestamps, as shown in the figure \ref{fig:zero_order}, where the red and yellow parts area are the energy value.
 
 
@@ -159,12 +159,12 @@ bruteforce(data, phases)
 }
 \end{lstlisting}
 
-\subsubsection{Optimizing phases}
+\section{Optimizing phases}
 The main goal of this section is to identify the optimal number and duration of time intervals. Indeed, several short phases can have an impact on switching overhead as well as few long phases on the overall energy. 
 
 Using the objective function, brute force can identify the optimal energy on each phase and any minimization method can provide the best phase division. By computing in a range of a number of phases, we can find the one that brings the lowest energy value. A genetic algorithm GA can be used to analyse a range of, for instance, 3 to 100 phases. A GA for a population of 10K individuals with a 0.1 elitism will ensure that 10\% of the best individuals will survive and 0.1 mutations will avoid local minimums within a maximum of 300 steps. A reproduction function will combine the half-phases of one individual with another, and the mutation will randomly change a division.
 
-\subsection{Results}
+\section{Results}
 
 % Normalization
 % Show that number of instructions is the same...
@@ -215,7 +215,7 @@ In most applications, we can see a pattern of 3 phases wich for this application
 Plotting for 3 phases, we can observe that better.
 
 
-\subsection{Conclusion and future work}
+\section{Conclusion and future work}
 The main conclusion of this work was that in HPC enviroment we don't need a lot of phases to optimize the energy consumption given that for one phase we can compute the optimal energy.
 
 The final idea is to use the information of the best phase to find a performance metric that can provide us this division, in future work we intend to compute this metrics using combination of hardware performance counters enabling optimal phase division in real time. This can improve current DVFS algorithms giving them an workload metric that can improve the energy savings.
