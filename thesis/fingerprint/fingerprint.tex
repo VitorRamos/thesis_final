@@ -1,4 +1,4 @@
-\section{Fingerprint tool}
+\section{Profiling with performance counters} \label{sec:profiling_with_performance_counters}
 The analysis of application performance is essential to better exploit its potential on High-Performance Computing (HPC) architectures. Access to performance counters, available in modern processors, allows collecting key information about program behavior to provide the most appropriate HPC execution strategy.
 In this context, we have developed an accurate tool based on performance counters, which facilitates modeling, fingerprinting, behavior comparison and clustering of applications.
 It provides a high-level Python API for accessing and configuring performance counters; while execution and counters data gathering is  performed by a C++ module to reduce overhead. 
@@ -10,7 +10,7 @@ This clustering facilitated the identification of applications with similar and 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Introduction}
+\section{Collecting performance counters} \label{sec:collecting_performance_countersl}
 
 Hardware Performance Counters are special registers available on most modern processors capable of counting micro-architectural events such as instructions executed, cache-hit, branches miss-predicted, energy estimation and much more.  In new architectures, there are hundreds of hardware events that can be monitored, and more are added to each new generation. 
 Performance counters were initially introduced for debugging, but since then they have provided a lot of useful information about running applications without slowing down the execution.
@@ -34,7 +34,7 @@ In addition to contributing to the standardization of kernel execution and monit
 
 The rest of this article is organized as follows. subsection 2 provides the related work regarding tools available and requirements. subsection 3 presents the performance counters and motivation. subsection 4 presents our clustering and application analysis tool, architecture and components. subsection 5 shows evaluation results: the comparison of existing API and the clustering of the PolyBench benchmarks. Finally, subsection 8 concludes this article.
 
-\subsection{Related Work}
+\section{State of the art performance counters APIs} \label{sec:state_of_the_art_performance_counters_APIs}
 
 There are only a few APIs allowing access to performance counters.
 PAPI \cite{Weaver2013Non-determinismImplementations, Mucci1999PAPI}, one of the most used libraries for accessing hardware performance counters, was originally developed to provide portable access to the counters found on a diverse collection of modern microprocessors. Rather than learning and writing a new performance infrastructure every time it is ported to a new machine. Measurement code can be written in the PAPI API, which hides the underlying interface.  
@@ -49,7 +49,7 @@ The Intel VTUNE \cite{Intel2021Vtune} performance analyzer comes with its own ke
 The problem with the approach of a tool and its own kernel interface is dangerous because, as mentioned on \cite{Eranian2008Perfmon2}, there is clearly code duplication, but more importantly, there is no coordination between the various interfaces that may coexist sharing access to the same PMU resource. To solve this problem, Perfmon2 \cite{Eranian2008Perfmon2} offers a standard interface that all tools can use. Unfortunately, it has not been widely adopted, just supported by a few architectures like the IA64. Instead, Linux comes up with a performance counters subsystem which provides a complete set of configurations.
 
 
-\subsection{Reading Performance Counters}
+\section{Accounting for errors and limitations} \label{sec:accounting_for_errors_and_limitations}
 
 Although hundreds of events are available for monitoring, only a limited number of counters can be used simultaneously.
 Therefore, the events to be monitored should be carefully selected and configured using the available counters.
@@ -75,7 +75,7 @@ These effects are non-intuitive to casual users and cause difficulties when stri
 Because of that, we have implemented a methodology to reduce the noise and over counts on performance counters.
 
 
-\subsection{Implementation}
+\section{Implementing a tool to read performance counters precisely} \label{sec:implementing_a_tool_to_read_performance_counters_precisely}
 
 %This module provide a high-level abstraction API to Linux perf events without overhead while executing
 
@@ -85,7 +85,7 @@ The libpfm4 module, developed by \cite{Eranian2008Perfmon2}, is used as an auxil
 
 %The main features that this library provide is a precise synchronous start the application and counter the event, a low overhead on sampling the events on time and an easy way to find and configure event in groups or standalone. 
 
-\subsubsection{ARCHITECTURE}
+\section{PMC tool architecture} \label{sec:PMC_tool_architecture}
 
 In figure \ref{fig:achitecture} we can see how these modules interact with each other.
 \begin{figure}[H]
@@ -189,8 +189,7 @@ It takes the data from several runs of the application and provides a set of fun
 % \end{lstlisting}
 % Compare two objects on a specific feature.
 
-\subsubsection{POST-PROCESSING}
-\label{sec:posprocessing}
+\section{Post-processing} \label{sec:posprocessing}
 % With this API we create clusterize the applications of Polybench applications.
 
 With the data collected from multiple runs of the application, the first goal is to obtain a single curve that minimizes the noise caused by the operating system and inaccuracies of the counters. 

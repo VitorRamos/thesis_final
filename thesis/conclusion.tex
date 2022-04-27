@@ -1,4 +1,4 @@
-\section{Conclusion} \label{sec:conclusion}
+\section{Conclusion Models} \label{sec:conclusion_models}
 This paper proposes an energy model based on the operating frequency and the number of cores for a shared memory system. This model serves as a reference for DVFS and DPM optimization problems.
 
 Results from three different HPC benchmarks demonstrate the potential of the proposed model while consuming 10 times less energy than a machine learning approach, such as SVR, to characterize applications. Moreover, it can provide knowledge-based hints to improve DVFS and DPM algorithms by enabling analysis of the contribution of each model parameter (e.g., level of parallelism) to the energy consumption. Indeed, as shown in Section \ref{subsec:dvfs_optmin}, when no oracle is available to choose the frequency and the number of cores the application should use, the proposed model can save around 12\% of energy for a random choice and up to 70\% for the worse possible choice. Considering the job history of our own HPC center, which shows the prevalence of worse possible choices made by users, the potential energy savings are very significant and encourage further research.
@@ -18,7 +18,7 @@ A weakness of the proposed model is the need for information about the input siz
 Another important aspect that is typically not taken into account is the number of processing cores to be used by a parallel program. This choice is left to the user, which often is not trivial as shown in this paper.
 
 
-\subsection{Conclusions and Future Works Pascal}\label{sec:conclusions_pascal}
+\subsection{Conclusions and Future Works Pascal} \label{sec:conclusions_pascal}
 
 This work introduces a practical and easy-to-use tool for measuring and analyzing the efficiency of parallel applications. The proposed tool focuses on observing scalability and energy consumption and implements features that enables analysis at hierarchical levels of the program's inner parts. It also simplifies the comparison of the application runs in different configurations, helping developers target software optimization efforts.
 
@@ -28,7 +28,7 @@ Although it does not offer graphic elements to visualize the collected metrics, 
 
 \textls[-20]{In future work, we intend to evolve this tool to include the ability to predict speedup and efficiency from a few samples using state-of-the-art prediction models present in the \mbox{literature \cite{Alex2020WhenParallelSpeedups, Vitor2022AnalyticalEnergyModel}}. The idea is to present the general behavior of the program and its scalability trend and reduce the execution time necessary to compose a comprehensive analysis. Furthermore, we intend to include features that allow the observation of parallel applications in distributed environments that use the Message Passing Interface (MPI) standard.}
 
-\subsection{Conclusion fingerprint}
+\subsection{Conclusion fingerprint tool}
 
 %\cite{Processors2012, Gregg2017}
 From the results, we observe that the API present overhead similar or lower to other low-level APIs, with the advantage of being in high abstraction and simplified configuration with a few lines of code, is possible to configure and gather counter data.
@@ -40,3 +40,8 @@ We also provide a precise definition to input size that made possible fingerprin
 %\subsection{FUTURE WORK}
 %
 %We pretend to use this tool to create a data set of applications behavior and automatically classify any program as belonging to a cluster or a set of clusters. The idea is to have a set of clusters that can describe most applications in this way we can know specific behaviors of the applications. This can be applied to various areas such as voltage scaling and frequency of the processor, once knowing the behavior of a particular program we can have an idea of what is the best strategy to control the frequency in order to save energy or increase performance.
+
+\section{Conclusion and future work: Phases}
+The main conclusion of this work was that in HPC enviroment we don't need a lot of phases to optimize the energy consumption given that for one phase we can compute the optimal energy.
+
+The final idea is to use the information of the best phase to find a performance metric that can provide us this division, in future work we intend to compute this metrics using combination of hardware performance counters enabling optimal phase division in real time. This can improve current DVFS algorithms giving them an workload metric that can improve the energy savings.

@@ -9,7 +9,7 @@ In order to improve scalability analysis and productivity over the vast spectrum
 %In addition, it aims at parallel scalability, instead focus on single-run performance, aggregating a minimal level of intrusion (<1\% on average), which is fundamental for accurately understanding the behavior and scalability trends of the parallel application.
 As it aims at accurately understanding scalability trends of parallel applications, detailed single-run performance analyses show minimal intrusion (less than 1\% overhead).
 
-\subsection{Introduction} \label{sec:introduction_pascal}
+\section{Introduction to profiling tools} \label{sec:introduction_to_profiling_tools}
 
 Developing parallel programs capable of exploiting the computational power of high-performance systems is as well-known as it is challenging~\cite{Huck2007, Islam2019, Weber2019}. 
 During the development process, the code optimization step is a fundamental part of the software construction strategy and is supported by performance measurement and analysis tools~\cite{Bergel2019, Weber2019, Huck2005, Geimer2010, Shende2006, Adhianto2010, Miller1995, Galobardes2015, Pillet2007, Islam2019}. The main objective of these tools is to help developers understand the execution characteristics, allowing the identification of bottlenecks and behavioral phenomena that compromise the program’s efficiency, thus guiding possible improvements~\cite{Brink2020, Huck2007}.
@@ -55,7 +55,7 @@ We offer an alternative tool for realizing parallel scalability analysis more ef
 
 The following sections describe how the tool is built and used for performance analysis. Section \ref{sec:related_work_pascal} presents the related works. Section \ref{sec:design_and_features_pascal} describes the tool architecture and goals; it explains the main features, usage, and collected data. The experimental results are presented in Section \ref{sec:validation_the_framework}. Finally, the contributions are summarized in Section \ref{sec:conclusions_pascal}, with an outlook of future works.
 
-\subsection{Related Works} \label{sec:related_work_pascal}
+\section{State of the art: profiling and tracing tools} \label{sec:state_of_the_art_profiling_and_tracing_tools}
 
 Performance analysis aimed at code optimization is an essential activity for developing parallel applications with scalable performance. For this purpose, performance analysis tools, like Caliper~\cite{Boehme2016}, HPCToolkit~\cite{Adhianto2010}, Scalasca~\cite{Geimer2010}, TAU~\cite{Shende2006}, Vampir~\cite{Weber2019}, and VTune~\cite{VTune}, are useful because they help developers identify where the application uses the available computing resources inefficiently through collecting detailed data of its execution. Such tools differ from each other mainly in terms of data measurement and analysis strategy: tracing or profiling, post-mortem or real-time; individual or comprehensive observation focus; and for providing or not providing visual elements that facilitate the judgment of collected data. Other solutions, like the DASHING framework~\cite{Islam2019} and the HATCHET library~\cite{Brink2020}, allow inspection of performance data from multiple sources. In this case, the goal of DASHING and HATCHET is to provide a more robust data set to support the analysis process.
 
@@ -116,11 +116,11 @@ Supported features are the automation of program executions according to various
 Regarding the amount of data collected, our approach uses data aggregation, which facilitates storage and further analysis.
 
 
-\subsection{Design and Features} \label{sec:design_and_features_pascal}
+%\section{Design and Features} \label{sec:design_and_features}
+%
+%This section presents the architecture, components, and interconnections used in the design of the proposed tool. It also includes a discussion about main features, instrumentation modes, and output file structure that contains the data measured and collected by the proposed tool.
 
-This section presents the architecture, components, and interconnections used in the design of the proposed tool. It also includes a discussion about main features, instrumentation modes, and output file structure that contains the data measured and collected by the proposed tool.
-
-\subsubsection{Architecture} \label{subsec:architecture_pascal}
+\section{Pascal architecture} \label{sec:pascal_architecture}
 The tool we propose to measure, combine and compare multiple runs of a parallel application implements two main concepts to achieve this goal: actuators and sensors.
 
 Actuators characterize the parameters we intend to observe. They are variables representing elements external to the program and which, when changed, can influence aspects such as the performance and efficiency of the running application.~Therefore, analyzing the result of actuators' variation is essential to understand how these elements impact program behavior, especially scalability and power consumption. By default, the tool implements actuators controlling the number of active cores and threads, the program input, and the CPU operating frequency.
@@ -148,7 +148,7 @@ This feature is essential for relating parallel code sections to analysis region
 	\caption{Architecture showing the interconnections of the central parts of the tool. Either binary (using the wrapper library) or an instrumented source code, the target application can be launched on the target platform by the tool core following the configuration parameters chosen by the user while deploying actuators/sensors. The resulting data collection is stored in Json file format for post analysis and visualization (GUI). \label{fig:pascal_architecture}}
 \end{figure} 
 
-\subsubsection{Instrumentation and Intrusiveness} \label{subsec:intrusiveness_pascal}
+\section{Instrumentation and Intrusiveness} \label{sec:instrumentation_and_intrusiveness}
 
 The instrumentation module is one of the most crucial. In addition to automating the instrumentation, it determines the overload and level of intrusiveness of the instrumentation process. This module is designed to execute the fewest instructions possible in the most optimized manner. Currently, there is instrumentation support for C/C++ languages through shared libraries that work with either automatic or manual instrumentation. Manual instrumentation is preferred when it is necessary to examine the application program in specific code sections, regardless of the type of content. 
 
@@ -289,7 +289,7 @@ For pluggable sensors, overhead is generally not a concern as they run on a sepa
 
 Another possible scenario is I/O overhead, where some network, disk, or memory resource becomes unavailable due to high sensor usage. However, this scenario is even rarer as sensors seldom produce data that quickly and, in all the performed tests, this was not close to being an issue.
 	
-\subsubsection{Features and Usage} \label{subsec:features_and_usage_pascal}
+\section{Features and Usage} \label{sec:features_and_usage}
 
 The analyzer is a simple and easy-to-use tool that allows the user to understand the general behavior of a program before investing in efforts that require in-depth and sometimes longer-term analysis. However, to meet the objectives that best match the needs and resources of the user, the tool provides functionalities to parameterize the measurement process. Among the main ones are:
 \begin{enumerate}
@@ -343,7 +343,7 @@ app.savedata("out.json")
 
 
 
-\subsubsection{Exported Data Structure} \label{subsec:datastructure_pascal}
+\section{Exported Data Structure} \label{sec:exported_data_structure}
 
 The data collected by the tool is exported to a .json file and stored on disk. The data structure is divided into two large groups. One group contains information about the configuration parameters driving deployment and execution. The other includes the performance measurements. The data is grouped in keys representing the processed input, the number of processing elements used in the execution, and the simulation ID. Since the tool can perform the same configuration many times, a simulation ID distinguishes runs that use the same input and number of processing elements.
 

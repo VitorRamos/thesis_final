@@ -20,7 +20,7 @@ E = \int_{0}^{T}P(t)dt.
 \label{eq:energy_definition_cont}
 \end{equation}
 
-\subsection{Power Models}
+\subsection{Power Models} \label{subsec:tb_power_models}
 
 The modeling of system parameters is becoming popular nowadays with the advantage of performance counters provided by the CPU or the operating system. These counters can measure micro-architectural events, such as instructions executed, cache hits, miss-predicted branches, and more; thus, providing a base for many different estimations of power usage. This makes this type of model very suitable for power estimation because it can use information about several internal states of the computer.
 
@@ -34,7 +34,7 @@ where $\alpha$ and $\beta$ are model parameters, and $f$ is the operating freque
 
 % We confirm that the meaning has been retained
 
-\subsection{Performance Models}
+\subsection{Performance Models} \label{subsec:tb_performance_models}
 The most common way to model the application performance is using the workload. The workload is an abstract representation of the amount of work done for a given time and speed. The workload ($W$) can be defined in many different ways. One common way, used in many studies, such as Paolillo et al. ~\cite{Paolillo2018OptimisationParallelism}, Francis et al. \cite{ Group2012HandbookSahni}, and Kim et al. \cite{Kim2015RacingHeuristics}, is the following:
 \begin{equation}
 W = \int_{0}^{\tau}s(t)dt = s\tau,
@@ -50,7 +50,7 @@ u = \frac{\tau}{T} = \frac{W/s}{T},
 where $T$ is the total execution time (idle and active), and $\tau$ is the active time, meaning when the processor was executing instructions.
 Models based on CPU utilization are the basis for DVFS algorithms. Even though this is not a controllable parameter, it is straightforward to measure system utilization with almost no overhead, and it is also very portable in terms of operating systems and architectures.
 
-\section{Related work} \label{sec:related_work}
+\section{Related work: Models} \label{sec:related_work_models}
 
 Merkel et al.~\cite{Merkel2006BalancingSystems} developed an energy model for processors based on events. Their model assumes a fixed energy consumption $\alpha_i$ for each activity, and by counting the number of occurrences $c_i$ of every activity, they estimate the total energy as:
 \begin{equation}

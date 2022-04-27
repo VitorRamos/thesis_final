@@ -8,11 +8,11 @@ In this section, the models presented in~Sections \ref{sec:power_model} and~\ref
 	\label{fig:ml_models}
 \end{figure}
 
-\subsection{Verifying Hypothesis}
+\subsection{Verifying Hypothesis} \label{subsec:ev_verifying_hypothesis}
 
 In this section, we validate whether the assumptions of our model are valid for the system used.
 
-\subsection{Frequency and Voltage Relation}
+\subsection{Frequency and Voltage Relation} \label{subsec:ev_frequency_and_voltage Relation}
 One of the assumptions was that the frequency and the voltage have a linear relationship, as indicated by ~\cref{eq:f_v}. To verify that, we build an experiment that sets the frequency to a specific value while sampling the voltage using the APERF and MPERF registers that provide feedback on the current CPU frequency. The average result of the sampling voltages is shown in  \cref{fig:freq_volt_rel}, where we can observe a near-perfect linear relation. This is because manufacturers implement this curve in the processors, using tables that relate ranges of frequencies to voltages so that they can precisely define any curve that will better suit their design.
 
 \begin{figure}[H]
@@ -23,7 +23,7 @@ One of the assumptions was that the frequency and the voltage have a linear rela
 	\label{fig:freq_volt_rel}
 \end{figure}
 
-\subsection{Input Size and Instructions}
+\subsection{Input Size and Instructions} \label{subsec:ev_input_size_and_instructions}
 We ran the applications with different inputs assuming  linear growth in the amount of work for one input to the other when building our model. However, measuring and controlling the amount of work would require much instrumentation and tuning to find an input corresponding to a certain amount of work. Therefore, to build our models, we use the time to reference the amount of work, assuming that the work is proportional to the executing time. \cref{fig:time_input} corresponds to the verification of this supposition.
 
 
@@ -154,7 +154,7 @@ These results show that all the assumptions were reasonable, and we can safely m
 \end{table}
 
 
-\section{Fitting the Models} \label{subsec:fitting}
+\section{Fitting the Models} \label{subsec:fitting_the_models}
 To find the parameters of  \cref{eq:en_final}, 10 uniformly random configurations of frequencies ($f$), cores ($p$) and inputs ($N$) were chosen from the range $1<=p<=32$, $1.2<=f<=2.2$ and $1<=N<=5$, respectively. The application was executed for each chosen configuration, and the measured energy and time values were collected. For the input size, if we assume that all CPU instructions take approximately the same time to execute, the number of basic operations will be directly correlated with the time. Thus, we can estimate the input size by looking at the execution time, allowing us to divide a large input size into several smaller ones, knowing their relationship, as performed in the work of Oliveira ~\cite{Oliveira2018ApplicationCharacterization}. The unity can also vary depending on the definition. For simplicity, we assign numbers from 1 to 10, increasing the problem linearly, so it is also possible to interpolate any input in between these values.
 
 For each configuration, samples of the power were collected using IPMI every 1 second. This sampling rate was chosen based on the magnitude of the mean run time of the applications, which is in the order of minutes. Therefore, this rate provides enough samples to measure average power. Additionally, timestamps and the total run time were collected. The total energy spent on each configuration is estimated by first interpolating the power samples using the first-order method and then integrating this function in the time.
@@ -165,8 +165,7 @@ The Python library Scikit-Learn was used to build the SVR model~\cite{Pedregosa2
 with a grid search used to find the best kernel function and the best values for the hyper-parameters penalty for the wrong ($C$) and ($\gamma$). For this data, the best function was the radial base function (RBF), and the hyper-parameters were $C=10^4$ and $\gamma=0.5$.
 
 
-\section{Measured versus Modeled Energy}
-\label{subsec:measuredversusmodeledenergy}
+\section{Measured versus Modeled Energy} \label{sec:measured_versus_modeled_energy}
 
 To validate the model, we ran all possible configurations in the tested machine, varying the cores in a range of $1<=p<=32$, the frequency in $1.2<=f<=2.2$, and the input in $1<=N<=5$. The total number of configurations varies from 400 to over 1000 depending on the application, as some applications have restrictions on the number of cores that they can run. Once the data was collected, we computed the mean percentage error (MPE) according to the following equation:
 \begin{equation}
@@ -174,7 +173,7 @@ To validate the model, we ran all possible configurations in the tested machine,
 	\label{eq:mpe}
 \end{equation}
 
-\subsection{Frequency $\times$ Cores}
+\subsection{Frequency $\times$ Cores} \label{subsec:mvme_frequency_x_cores}
 \cref{fig:en_eq_freq_cores_fc} plots the measured and modeled energy consumption for some of the applications modeled. In addition,  some of the possible shapes that the model can take while varying the number of active cores, and operating frequency, are shown.%please confirm that the intended meaning has been retained.
 % yes its the same
 
@@ -197,7 +196,8 @@ To validate the model, we ran all possible configurations in the tested machine,
 	}
 	\label{fig:en_eq_freq_cores_fc}
 \end{figure}
-\subsection{Frequency $\times$ Input}
+
+\subsection{Frequency $\times$ Input} \label{subsec:mvme_frequency_x_input}
 \cref{fig:en_eq_freq_inp_fi} plots the measured and modeled energy consumption for some of the applications modeled. The diagrams show some of the possible shapes that the model can take while varying the operating frequency, and input size.
 \begin{figure}[H]
 	\centering
@@ -218,7 +218,8 @@ To validate the model, we ran all possible configurations in the tested machine,
 	}
 	\label{fig:en_eq_freq_inp_fi}
 \end{figure}
-\subsection{Cores $\times$ Input}
+
+\subsection{Cores $\times$ Input} \label{subsec:mvme_cores_x_input}
 \cref{fig:en_eq_core_inp_ci} plots the measured and modeled energy consumption for some of the applications modeled. The diagrams  show some of the possible shapes that the model can take while varying the number of active cores, and input size.
 \begin{figure}[H]
 	\centering
@@ -241,7 +242,7 @@ To validate the model, we ran all possible configurations in the tested machine,
 \end{figure}
 
 
-\subsection{Comparison}
+\section{Comparison} \label{sec:comparison}
 The average results for each application were calculated using a model trained with only 10 configurations, and the comparison is displayed \cref{fig:mpe_svr_eq}. %We calculated the raw MPE values shown in ~\cref{tab:mpe_svr_eq}.
 \begin{figure}[H]
 	\centering
@@ -276,7 +277,7 @@ Openmc       & 11.15    & 24.34  \\
 \label{tab:mpe_svr_eq}
 \end{table}
 
-\section{Overheads on Training} \label{subsec:overhead}
+\section{Overheads on Training} \label{subsec:overhead_on_training}
 It is known that machine learning is data-driven; in that sense, the SVR model obtained using only 10 configurations could be improved, but what about the analytical model? 
 To answer that question, the proposed model and the SVR were also trained with a varying number of configurations.
 We then compared the MPE and the amount of energy spent to create each model. 
@@ -341,7 +342,7 @@ The error of the analytical model is almost constant but that of the SVR, initia
 The meeting point of the MPE for the SVR and the proposed model can be extracted from \cref{fig:overall_train}b.
 It shows that, in around 90 configurations, the SVR starts to have a smaller error. The cost of that is the linear increase in energy spent on training. The increase in energy, about 10 times more, can be observed in \cref{fig:overall_train}a.
 
-\section{Analysis}
+\section{Analysis} \label{sec:analysis}
 One of the most significant advantages of using an analytical model is the understanding of the problem that an equation provides, making many different kinds of analysis possible that are otherwise impossible with a machine learning model. In this section, we discuss one of the possible analyses. In the following figures, we try to understand the contribution of each parameter of the equation to the total energy consumption.
 
 For this analysis, we took the model of one of the applications and, varying one parameter of the equation, we display the energy versus performance (time) for all configurations. After that, we computed the Pareto frontier, a set of all Pareto efficient allocations, i.e., all the configurations where resources cannot be reallocated to make one individual better off without making at least one individual worse off. This gives us all the configurations where we have an optimal trade-off of performance and energy to choose from.
@@ -371,7 +372,7 @@ From this figure, we can see that when increasing the value of the static power 
 In  \cref{fig:pareto_w}, we observe that, as the parallelism level increases the total energy decreases. The number of cores tends to be higher with a higher level of parallelism as expected, and the frequency shows an inverse relation.
 
 
-\section{DVFS and DPM Optimization} \label{subsec:dvfs_optmin}
+\section{DVFS and DPM Optimization} \label{sec:dvfs_dpm_optminzation}
 The effectiveness of the proposed approach during optimization was evaluated with a simple algorithm that finds the optimal frequency and number of active cores from the proposed equation. The results were then compared to the Linux default choices for power management.
 
 With \cref{eq:en_final}, it is possible to calculate energy consumption estimates for each possible configuration since there is a finite range of possible values for the frequency and number of cores. It is also possible to apply constraints on the execution time, frequency, and the number of active cores. Then, the configuration that minimizes energy consumption for a given input can be selected. The complete workflow is shown in \cref{fig:optim_workflow}. We can see that any optimization problem can be structured with our model and the system's constraints. In the following examples, the optimization problem that we build is to minimize the energy equation given the constraints of possible frequencies and the number of cores that our system can run. The algorithm selected to minimize was the newton-CG~\cite{Royer2020AOptimization}.

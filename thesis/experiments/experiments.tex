@@ -9,17 +9,17 @@ State P starts at level P0, where frequency and voltage are the maximum possible
 After an idle time, the processor begins to activate C states, starting with C0 where it is still fully active, then moving to C1, where some features are disabled, up to Cn, where all possible features are disabled. The ACPI standard establishes the functionalities that can be disabled between level C1 and level C3, as seen in Table \ref {tab:states_c}. The other levels are specific to each manufacturer.
 
 \begin{table}[H]
-\centering
-\begin{tabular}{| l | l | l |}
-\hline
-Mode & Name & Functionality \\ \hline
-C0 & operating state & Active processor \\ \hline
-C1 & Halt & Stop executing instructions \\ \hline
-C2 & Stop-Clock & Disable the internal clock \\ \hline
-C3 & Sleep & Disable cache coherence \\ \hline
-\end{tabular}
-\caption{C states}
-\label{tab:states_c}
+	\centering
+	\begin{tabular}{| l | l | l |}
+		\hline
+		Mode & Name & Functionality \\ \hline
+		C0 & operating state & Active processor \\ \hline
+		C1 & Halt & Stop executing instructions \\ \hline
+		C2 & Stop-Clock & Disable the internal clock \\ \hline
+		C3 & Sleep & Disable cache coherence \\ \hline
+	\end{tabular}
+	\caption{C states}
+	\label{tab:states_c}
 \end{table}
 
 In state C, the higher the level the greater the energy savings, but returning to the fully functional level is more difficult. In states P, there is a trade-off between performance and energy savings. \cref{fig:p_state} best illustrates the change of states, in which we can see which parts of the circuits are deactivated in states C, the latency to return to the active state, power consumption and also shows the relationship of states P with often.
@@ -27,15 +27,15 @@ In state C, the higher the level the greater the energy savings, but returning t
 \begin {figure} [H]
 \centering
 \begin{subfigure}[t]{0.5\textwidth}
-\centering
-\includegraphics[width=\columnwidth]{intro/figures/c_states}
-\caption{C states}
+	\centering
+	\includegraphics[width=\columnwidth]{intro/figures/c_states}
+	\caption{C states}
 \end{subfigure}%
 ~
 \begin{subfigure}[t]{0.5\textwidth}
-\centering
-\includegraphics[width=\columnwidth]{intro/figures/p_states}
-\caption{States P}
+	\centering
+	\includegraphics[width=\columnwidth]{intro/figures/p_states}
+	\caption{States P}
 \end{subfigure}
 \caption {Illustration of states C and P} {Altered image from \protect \url {https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states}}
 \label{fig:p_state}
@@ -83,10 +83,10 @@ The overall view of the architecture is shown in \cref{fig:architecture}.
 The maximum non-turbo frequency was 2.3 GHz, and the total physical memory of the node was 128 GB (8 $\times$ 16 GB). Turbo frequency and hardware multi-threading were disabled during all experiments. The operating system used was Linux CentOS 6.5, kernel 4.16. 
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=\columnwidth]{models/figures/architecture.png}
-	\caption{Node architecture (the image was made with the lstop application).}
-	\label{fig:architecture}
+\centering
+\includegraphics[width=\columnwidth]{models/figures/architecture.png}
+\caption{Node architecture (the image was made with the lstop application).}
+\label{fig:architecture}
 \end{figure}
 
 The Linux kernel has many different policies for power management, depending on the driver. In the default driver, the acpi-cpufreq, the options are Powersave, Performance, Ondemand, Conservative, and Userspace. Each governor has a policy on how the frequency is selected. In this investigation, the frequency control was performed using the Userspace governor, which allows the user or any userspace program to set the CPU to a specific frequency. The core control was accomplished by modifying the appropriate system files with the default CPU-hotplug driver.
@@ -100,10 +100,8 @@ The applications blackscholes, bodytrack, canneal, dedup, fluidanimate, freqmine
 %
 %\textls[-20]{{OpenMC is an application that implements the Monte-Carlo method to simulate the transport of neutrons and photons. It is a classic program aimed at high-performance computing.}}
 
-\section{Validation the framework}\label{sec:validation_the_framework}
+\section{Pascal framework validation} \label{sec:pascal_framework_validation}
 In this Section, we discuss the measurements and simulation results for three distinct cases, including two real applications. We also demonstrate how external libraries and standalone visualization tools can be used to render the collected data and investigate performance aspects such as the program's scalability capacity.
-
-\subsection{Configuration} \label{subsec:configuration_pascal}
 
 We used three experiments to assess the tool and demonstrate its ability to support analysis aimed at observing parallel scalability. The first includes a runtime imbalance between processing units in a specific parallel region. In this case, the objective is to present how the analyzer helps users observe the impact of the inefficiency of a code part on the whole program. The code for this experiment is presented in \cref{lst:codes_regionscomparison}. It consists of two simple parallel regions with the same functionality that divide the iterations of a loop between the available threads. The difference between the regions lies in the strategies used to manipulate the sum variable, used in the example to store the values of the calculations performed in each thread. We assume that the {\tt anyop()} function, in this case, invariably has the same runtime in all function calls.
 
@@ -173,7 +171,7 @@ The command return a .json file with all the information necessary for our analy
 	\end{tabular}}
 \end{table}
 
-\subsection{Pascal Analyzer Validation}\label{sec:results_pascal}
+\subsection{Case of study}\label{subsec:pfv_case_of_study}
 
 The analyzer does not display graphics and other visual elements natively. However, the simple use of external libraries allows generating graphics and visualizing points of the program's behavior that you want to observe. In addition, specialized visualization tools can also be used to view the results. PaScal Viewer \cite{Silva2018}, for example, natively interprets the analyzer's output files, complementing its functionality and creating an integrated and appropriate environment for the program's parallel scalability analysis.
 
@@ -327,11 +325,11 @@ Even if the analyzer does not display graphics natively, analysis aimed at obser
 % \caption{Efficiency for OpenMC}
 % \label{fig:efficiency_openmc_detailed}
 % \end{figure}
-\subsection{Fingerprint Tool validation}
+\section{Fingerprint Tool validation} \label{sec:fingerprint_tool_validation}
 
 In this subsection, we first show the comparison between our tool and others already established, as well as the clustering process.
 
-\subsubsection{ACCURACY COMPARISON}
+%\subsection{Accuracy comparison} \label{subsec:ftv_accuracy_comparison}
 
 % \begin{table*}[h]
 % \centering
@@ -415,7 +413,7 @@ This can be an important problem if the application contains a small number of i
 
 The standard deviation of the 30 executions shows that our tool has the smallest variation on a run-to-run on most events. On the contrary, PAPI on Python shows a big variation compared to the others.
 
-\subsubsection{CLUSTERING}
+\subsubsection{Case of study} \label{subsec:ftv_case_of_study}
 
 To cluster applications first we need to have a way to compare two programs, for that we define a new variable that tries to compute a fingerprint to the program, this variable has to look similar when we execute the same program with different conditions and inputs. Thinking in the simplest model of a program as a Turing machine as everything can be done with a tap of memory and set of rules we empirically define the variable input size as described on the equation \ref{eq:input_size}. On real computers this is not too far from reality, most of the computations and input and output operations somehow pass through the memory, so analyzing the relationship of the total number of instructions and memory instructions can give us a good fingerprint.
 
