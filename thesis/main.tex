@@ -212,7 +212,7 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	This chapter will...
 	\include{intro/intro}
 	
-	\chapter{Proposed Models} \label{chapter:models}
+	\chapter{Application Models} \label{chapter:models}
 	In this chapter, the proposed power, performance and energy models are derived and validated.
 	Energy consumption is crucial in high-performance computing (HPC), especially to enable the next exascale generation. Hence, modern systems implement various hardware and software features for power management. Nonetheless, due to numerous different implementations, we can always push the limits of software to achieve the most efficient use of our hardware. To be
 	energy efficient, the software relies on dynamic voltage and frequency scaling (DVFS), as well as dynamic power management (DPM). Yet, none have privileged information on the hardware architecture and application behavior, which may lead to energy-inefficient software operation. 
@@ -225,13 +225,11 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	\include{models/models}
 	%\include{optmizers/optmizers}
 	
-	\chapter{Energy-optimal configurations}
-	\include{optmization}
+	\chapter{Energy optimization using the models}
+	\include{experiments/setup}
+	\include{optmization/optmization}
 	
-	\chapter{Phases}
-	Modelo no tempo
-	Fingerprint
-	Phases com modelo no tempo
+	\chapter{Extending the models with phases}
 	\include{phases/phases}
 	
 	
@@ -242,7 +240,8 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	\include{fingerprint/fingerprint}
 
 	This chapter will describe all the experiments that validate the models constraints.
-	\include{experiments/experiments}
+	\include{framework/validation}
+	
 	
 	\chapter{Conclusions}
 	This chapter will...
@@ -253,6 +252,5 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	\include{references.tex}
 	
 	\backmatter
-	
 	
 \end{document}

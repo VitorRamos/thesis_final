@@ -6,7 +6,7 @@ The energy efficiency of HPC can be achieved through dynamic workload planning. 
 \section{Introduction to models on time} \label{sec:introduction_to_models_on_time}
 Talk about the importance of energy efficiency.
 
-\section{Related work: Phases} \label{sec:related_work_phases}
+\section{Phases related work} \label{sec:related_work_phases}
 Some related work
 
 \section{Optimal energy configuration} \label{sec:Optimal_energy_configuration}
@@ -79,7 +79,7 @@ The extent of the hypotheses will later be validated, however, by taking advanta
 % I am trying to say here that we can split the program using a percentage of the time because the time is proportional to the number of executed instructions. If we complete x% of the time, that will be x% of instructions. This implies that we can resume and continue the program from any point ensuring that we executed all instructions. If we have a previous execution for each configuration, we can compute any combination with minimal error.
 
 
-\section{Data Collection} \label{sec:data_collection}
+\section{Data collection} \label{sec:data_collection}
 Data, power samples, can be gathered by running the application in several possible context configurations. In a system with 32 cores that can run at 13 frequencies, we can have 416 (32*13) possible configurations. Power samples can be taken from dedicated sensors in the IPMI system [REF]. To avoid overload, a sample rate of 0.5 seconds is more than sufficient. Additionally, the behavior of an application can be affected by the workload, so it is also interesting to run applications with different inputs and assess their impact on the collected data [REF victor alex paper].
 
 % We can consider different input sizes as an new application...
@@ -162,7 +162,7 @@ The main goal of this section is to identify the optimal number and duration of 
 
 Using the objective function, brute force can identify the optimal energy on each phase and any minimization method can provide the best phase division. By computing in a range of a number of phases, we can find the one that brings the lowest energy value. A genetic algorithm GA can be used to analyse a range of, for instance, 3 to 100 phases. A GA for a population of 10K individuals with a 0.1 elitism will ensure that 10\% of the best individuals will survive and 0.1 mutations will avoid local minimums within a maximum of 300 steps. A reproduction function will combine the half-phases of one individual with another, and the mutation will randomly change a division.
 
-\section{Results: Phases experiments} \label{sec:results_phases_experiments}
+\section{Phases experiments results} \label{sec:results_phases_experiments}
 
 % Normalization
 % Show that number of instructions is the same...

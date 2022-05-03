@@ -1,4 +1,4 @@
-\section{Model Validation} \label{sec:model_validation}
+\section{Model validation} \label{sec:model_validation}
 In this section, the models presented in~Sections \ref{sec:power_model} and~\ref{sec:performance_model} were validated with a benchmark specific for multi-core architectures. Additionally, in order to assess the modeling overhead and accuracy, our proposal was then compared to machine learning approaches. We compared against support vector regression (SVR)~\cite{Smola2004ARegression}, decision tree \cite{Kitts2006RegressionLecture}, k-nearest neighbors \cite{Altman1992AnRegression}, multilayer perceptron \cite{Murtagh1991MultilayerRegression}, and some new methods, such as Gao et al. \cite{Gao2019DendriticPrediction}. However, SVR was chosen as the most representative because it performed best in our tests without aggressive fine-tuning, as shown in \cref{fig:ml_models}.
 
 \begin{figure}[H]
@@ -154,7 +154,7 @@ These results show that all the assumptions were reasonable, and we can safely m
 \end{table}
 
 
-\section{Fitting the Models} \label{subsec:fitting_the_models}
+\section{Fitting the models} \label{subsec:fitting_the_models}
 To find the parameters of  \cref{eq:en_final}, 10 uniformly random configurations of frequencies ($f$), cores ($p$) and inputs ($N$) were chosen from the range $1<=p<=32$, $1.2<=f<=2.2$ and $1<=N<=5$, respectively. The application was executed for each chosen configuration, and the measured energy and time values were collected. For the input size, if we assume that all CPU instructions take approximately the same time to execute, the number of basic operations will be directly correlated with the time. Thus, we can estimate the input size by looking at the execution time, allowing us to divide a large input size into several smaller ones, knowing their relationship, as performed in the work of Oliveira ~\cite{Oliveira2018ApplicationCharacterization}. The unity can also vary depending on the definition. For simplicity, we assign numbers from 1 to 10, increasing the problem linearly, so it is also possible to interpolate any input in between these values.
 
 For each configuration, samples of the power were collected using IPMI every 1 second. This sampling rate was chosen based on the magnitude of the mean run time of the applications, which is in the order of minutes. Therefore, this rate provides enough samples to measure average power. Additionally, timestamps and the total run time were collected. The total energy spent on each configuration is estimated by first interpolating the power samples using the first-order method and then integrating this function in the time.
@@ -165,7 +165,7 @@ The Python library Scikit-Learn was used to build the SVR model~\cite{Pedregosa2
 with a grid search used to find the best kernel function and the best values for the hyper-parameters penalty for the wrong ($C$) and ($\gamma$). For this data, the best function was the radial base function (RBF), and the hyper-parameters were $C=10^4$ and $\gamma=0.5$.
 
 
-\section{Measured versus Modeled Energy} \label{sec:measured_versus_modeled_energy}
+\section{Measured versus modeled energy} \label{sec:measured_versus_modeled_energy}
 
 To validate the model, we ran all possible configurations in the tested machine, varying the cores in a range of $1<=p<=32$, the frequency in $1.2<=f<=2.2$, and the input in $1<=N<=5$. The total number of configurations varies from 400 to over 1000 depending on the application, as some applications have restrictions on the number of cores that they can run. Once the data was collected, we computed the mean percentage error (MPE) according to the following equation:
 \begin{equation}
@@ -277,7 +277,7 @@ Openmc       & 11.15    & 24.34  \\
 \label{tab:mpe_svr_eq}
 \end{table}
 
-\section{Overheads on Training} \label{subsec:overhead_on_training}
+\section{Overheads on training} \label{subsec:overhead_on_training}
 It is known that machine learning is data-driven; in that sense, the SVR model obtained using only 10 configurations could be improved, but what about the analytical model? 
 To answer that question, the proposed model and the SVR were also trained with a varying number of configurations.
 We then compared the MPE and the amount of energy spent to create each model. 
@@ -372,7 +372,7 @@ From this figure, we can see that when increasing the value of the static power 
 In  \cref{fig:pareto_w}, we observe that, as the parallelism level increases the total energy decreases. The number of cores tends to be higher with a higher level of parallelism as expected, and the frequency shows an inverse relation.
 
 
-\section{DVFS and DPM Optimization} \label{sec:dvfs_dpm_optminzation}
+\section{DVFS and DPM optimization} \label{sec:dvfs_dpm_optminzation}
 The effectiveness of the proposed approach during optimization was evaluated with a simple algorithm that finds the optimal frequency and number of active cores from the proposed equation. The results were then compared to the Linux default choices for power management.
 
 With \cref{eq:en_final}, it is possible to calculate energy consumption estimates for each possible configuration since there is a finite range of possible values for the frequency and number of cores. It is also possible to apply constraints on the execution time, frequency, and the number of active cores. Then, the configuration that minimizes energy consumption for a given input can be selected. The complete workflow is shown in \cref{fig:optim_workflow}. We can see that any optimization problem can be structured with our model and the system's constraints. In the following examples, the optimization problem that we build is to minimize the energy equation given the constraints of possible frequencies and the number of cores that our system can run. The algorithm selected to minimize was the newton-CG~\cite{Royer2020AOptimization}.

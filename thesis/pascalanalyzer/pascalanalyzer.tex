@@ -1,4 +1,4 @@
-\section{Pascal Analyzer} \label{sec:pascal_analyzer}
+\section{PascalAnalyzer} \label{sec:pascal_analyzer}
 High-performance computing systems have become increasingly dynamic, complex, and unpredictable. To help build software that uses full-system capabilities, performance measurement and analysis tools exploit extensive execution analysis focusing on single-run results. Despite being effective in identifying performance hotspots and bottlenecks, these tools are not sufficiently suitable to evaluate the overall scalability trends of parallel applications. Either they lack the support for combining data from multiple runs or collect excessive data, causing unnecessary overhead. 
 In this work, we present a tool for automatically measuring and comparing several executions of a parallel application according to various scenarios characterized by the input arrangements, the number of threads, number of cores, and frequencies.
 %In this work, we present a tool for measuring and comparing several executions of a parallel application automatically with different input arrangements, number of threads, cores, and frequencies to understand its scalability by observing how it uses the available computational resources across configurations. 
@@ -120,7 +120,7 @@ Regarding the amount of data collected, our approach uses data aggregation, whic
 %
 %This section presents the architecture, components, and interconnections used in the design of the proposed tool. It also includes a discussion about main features, instrumentation modes, and output file structure that contains the data measured and collected by the proposed tool.
 
-\section{Pascal architecture} \label{sec:pascal_architecture}
+\section{PascalAnalyzer architecture} \label{sec:pascal_architecture}
 The tool we propose to measure, combine and compare multiple runs of a parallel application implements two main concepts to achieve this goal: actuators and sensors.
 
 Actuators characterize the parameters we intend to observe. They are variables representing elements external to the program and which, when changed, can influence aspects such as the performance and efficiency of the running application.~Therefore, analyzing the result of actuators' variation is essential to understand how these elements impact program behavior, especially scalability and power consumption. By default, the tool implements actuators controlling the number of active cores and threads, the program input, and the CPU operating frequency.
