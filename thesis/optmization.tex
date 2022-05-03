@@ -1,4 +1,4 @@
-\section{Validation the model} \label{sec:experimentalvalidation}
+\section{Model Validation} \label{sec:model_validation}
 In this section, the models presented in~Sections \ref{sec:power_model} and~\ref{sec:performance_model} were validated with a benchmark specific for multi-core architectures. Additionally, in order to assess the modeling overhead and accuracy, our proposal was then compared to machine learning approaches. We compared against support vector regression (SVR)~\cite{Smola2004ARegression}, decision tree \cite{Kitts2006RegressionLecture}, k-nearest neighbors \cite{Altman1992AnRegression}, multilayer perceptron \cite{Murtagh1991MultilayerRegression}, and some new methods, such as Gao et al. \cite{Gao2019DendriticPrediction}. However, SVR was chosen as the most representative because it performed best in our tests without aggressive fine-tuning, as shown in \cref{fig:ml_models}.
 
 \begin{figure}[H]
@@ -252,7 +252,7 @@ The average results for each application were calculated using a model trained w
 	\label{fig:mpe_svr_eq}
 \end{figure}
 
-\cref{fig:mpe_svr_eq} shows that the proposed model always performed better, with a lower MPE than SVR, when we were limited to 10 training points. This result is further explored in the next Section \ref{subsec:overhead}, where we undertake a comparison with different training sizes. The exact values are shown in \cref{tab:mpe_svr_eq}.
+\cref{fig:mpe_svr_eq} shows that the proposed model always performed better, with a lower MPE than SVR, when we were limited to 10 training points. This result is further explored in the next Section \ref{sec:overhead_on_training}, where we undertake a comparison with different training sizes. The exact values are shown in \cref{tab:mpe_svr_eq}.
 
 \begin{table}[H]
 \centering
