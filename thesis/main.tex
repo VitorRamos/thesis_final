@@ -210,9 +210,26 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	
 	\chapter{Introduction}
 	This chapter will...
+	Describe the context
 	\include{intro/intro}
 	
-	\chapter{Application Models} \label{chapter:models}
+	\chapter{Related work*}
+	Move all related work to here
+	Write a small introduction, and group similar works.
+	Derive some conclusion about that.
+	
+	\chapter{Theoretical background*}
+	
+	\chapter{Parallel Scalability Suite*}
+	This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
+	
+	\include{pascalanalyzer/pascalanalyzer}
+	\include{fingerprint/fingerprint}
+	
+	This chapter will describe all the experiments that validate the models constraints.
+	\include{framework/validation}
+	
+	\chapter{Application energy and performance models} \label{chapter:models}
 	In this chapter, the proposed power, performance and energy models are derived and validated.
 	Energy consumption is crucial in high-performance computing (HPC), especially to enable the next exascale generation. Hence, modern systems implement various hardware and software features for power management. Nonetheless, due to numerous different implementations, we can always push the limits of software to achieve the most efficient use of our hardware. To be
 	energy efficient, the software relies on dynamic voltage and frequency scaling (DVFS), as well as dynamic power management (DPM). Yet, none have privileged information on the hardware architecture and application behavior, which may lead to energy-inefficient software operation. 
@@ -225,22 +242,12 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	\include{models/models}
 	%\include{optmizers/optmizers}
 	
-	\chapter{Energy optimization using the models}
+	\chapter{Energy optimization using the models*}
 	\include{experiments/setup}
 	\include{optmization/optmization}
 	
-	\chapter{Extending the models with phases}
+	\chapter{Application-phase energy and performance models}
 	\include{phases/phases}
-	
-	
-	\chapter{Framework}
-	This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
-	
-	\include{pascalanalyzer/pascalanalyzer}
-	\include{fingerprint/fingerprint}
-
-	This chapter will describe all the experiments that validate the models constraints.
-	\include{framework/validation}
 	
 	
 	\chapter{Conclusions}
