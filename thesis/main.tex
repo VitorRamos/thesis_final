@@ -213,12 +213,14 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	Describe the context
 	\include{intro/intro}
 	
-	\chapter{Related work*}
-	Move all related work to here
-	Write a small introduction, and group similar works.
-	Derive some conclusion about that.
+%	\chapter{Related work*}
+%	Move all related work to here
+%	Write a small introduction, and group similar works.
+%	Derive some conclusion about that.
 	
 	\chapter{Theoretical background*}
+	This chapter will..
+	\include{experiments/setup}
 	
 	\chapter{Parallel Scalability Suite*}
 	This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
@@ -242,11 +244,11 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	\include{models/models}
 	%\include{optmizers/optmizers}
 	
-	\chapter{Energy optimization using the models*}
-	\include{experiments/setup}
+	%\chapter{Energy optimization using the models*}
 	\include{optmization/optmization}
 	
 	\chapter{Application-phase energy and performance models}
+	Dynamic voltage and frequency scaling (DVFS) and dynamic power management (DPM) are essential software techniques for saving energy in modern computers. These techniques control hardware resources such as frequency and number of active processors. Although there is much work on the subject, there is an underexplored sub-topic: the impact of the choice of phase division on energy consumption. This work analyzes the impact of phase division on the energy efficiency of algorithms by proposing a methodology that combines measurement data with a heuristic to provide insights into choosing the best phase divisions. Our heuristic can reduce the scan space from $10^{7000}$ to $10^2$ with an average error of 10\% and up to 38\% reduction in energy consumption using optimal split compared to standard Linux DVFS. In addition, we evaluated the trade-off of having too many divisions and the overhead caused. Finally, we have identified that there is usually a limit to the number of phases the algorithm can benefit from, giving a lower limit to the minimum number of phases.
 	\include{phases/phases}
 	
 	

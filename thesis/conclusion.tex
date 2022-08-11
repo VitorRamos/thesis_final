@@ -43,7 +43,9 @@ We also provide a precise definition to input size that made possible fingerprin
 %
 %We pretend to use this tool to create a data set of applications behavior and automatically classify any program as belonging to a cluster or a set of clusters. The idea is to have a set of clusters that can describe most applications in this way we can know specific behaviors of the applications. This can be applied to various areas such as voltage scaling and frequency of the processor, once knowing the behavior of a particular program we can have an idea of what is the best strategy to control the frequency in order to save energy or increase performance.
 
-\section{Conclusion and future work: Phases}
-The main conclusion of this work was that in HPC enviroment we don't need a lot of phases to optimize the energy consumption given that for one phase we can compute the optimal energy.
+\section{Conclusion and future work phases} \label{sec:conclusion}
+The main conclusion of this work was that in the HPC environment, many phases are not necessary to reach optimal energy consumption. However, an average of 35 phases was enough for more than three benchmarks covering the most varied HPC applications.
 
-The final idea is to use the information of the best phase to find a performance metric that can provide us this division, in future work we intend to compute this metrics using combination of hardware performance counters enabling optimal phase division in real time. This can improve current DVFS algorithms giving them an workload metric that can improve the energy savings.
+It was also possible to notice that there is still a lot to improve in optimizing the DVFS algorithms since we obtained an average of 38\% energy savings compared to Ondemand on Linux.
+
+For future work, the final idea is to use the information from the best phase to find a performance metric that can provide us with this division without needing data. In future work, we intend to calculate these metrics using a combination of hardware performance counters that allow real-time optimal phase division. This metric can improve current DVFS algorithms by providing them with a workload metric that can improve energy savings.
