@@ -192,10 +192,17 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	\frontmatter
 	
 	\begin{umonsThesisAbstract}
-		Energy consumption is a key to enable exascale High-performance Computing (HPC). Energy-optimized hardware and software combinations still could be inefficient if software operates poorly. 
-		Software operation relies on dynamic scaling of frequency and voltage (DVFS) as well as dynamic power management (DPM), but none have priority information on the application, which leads to inefficient software operation. This work proposes an analytical model that can be used to estimate energy-optimal software operation. 
-		This work proposes a new energy model that can be used as a basis to optimize DVFS and DPM, as well as to assess the contribution of parameters such as parallelism level and dynamic power to the energy consumption.
-		Since in HPC, applications can run on multiple cores and associated frequencies, both of which can be controlled for most systems, the novelty of the model includes such parameters as well as the workload, two application parameters and three system parameters.
+		Energy consumption is a key to enabling exascale High performance Computing (HPC). However, energy-optimized hardware and software combinations could still be inefficient if the software operates poorly. 
+		
+		Software operation relies on dynamic scaling of frequency and voltage (DVFS) and dynamic power management (DPM), but none have priority information on the application, leading to inefficient software operation. 
+		
+		This work proposes a set of tools, models, and algorithms for energy optimization aimed at high-performance computing based on knowledge of the application and the specific architecture. The main contributions of this work are:
+		
+		A framework called PascalSuite automatically measures and compares multiple executions of a parallel application according to various scenarios characterized by input arrangements, number of threads, number of cores, and frequencies. As a result, PascalSuite can automate designing application models with an overhead of less than 1\%.
+		
+		A full-system energy model based on the CPU frequency and the number of cores. The model aims to understand and optimize the energy behavior of parallel applications in HPC systems according to application parameters, such as the degree of parallelism and CPU parameters related to dynamic and static power.
+		
+		A methodology that combines measurement data with a heuristic algorithm to provide insights into choosing the best phase divisions. Our heuristic can reduce the scan space from $10^{7000}$ to $10^2$ with an average error of 10\% and up to 38\% reduction in energy consumption using optimal distribution compared to standard Linux DVFS.
 	\end{umonsThesisAbstract}
 	
 	% \vspace{2cm}
@@ -208,52 +215,47 @@ pdfdisplaydoctitle,%	displays document title instead of file name in title bar
 	
 	\mainmatter
 	
-	\chapter{Introduction}
-	This chapter will...
-	Describe the context
+	\chapter{Introduction} \label{chapter:introduction}
+	In this chapter, we present the motivations for this work, as well as its objectives and main contributions.
 	\include{intro/intro}
 	
-%	\chapter{Related work*}
-%	Move all related work to here
-%	Write a small introduction, and group similar works.
-%	Derive some conclusion about that.
-	
-	\chapter{Theoretical background*}
-	This chapter will..
+	\chapter{Theoretical background} \label{chapter:theoretical_background}
+	This chapter will give the reader a better understanding of some terms used throughout the thesis, as well as details of configurations, the chosen benchmarks, and the architecture of the case study.
 	\include{experiments/setup}
 	
-	\chapter{Parallel Scalability Suite*}
-	This chapter introduces the framework developed, the fingerprint tool and pascal analyzer.
+	\chapter{Parallel Scalability Suite} \label{chapter:pascal_suite}
+	High-performance computing systems have become increasingly dynamic, complex, and unpredictable. To help build software that uses full-system capabilities, performance measurement and analysis tools exploit extensive execution analysis focusing on single-run results. Despite being effective in identifying performance hotspots and bottlenecks, these tools are not sufficiently suitable to evaluate the overall scalability trends of parallel applications. Either they lack the support for combining data from multiple runs or collect excessive data, causing unnecessary overhead. 
+	In this chapter, we present a tool for automatically measuring and comparing several executions of a parallel application according to various scenarios characterized by the input arrangements, the number of threads, number of cores, and frequencies.
+	Unlike other existing performance analysis tools, the proposed work covers some gaps in specialized features necessary to better understand computational resources scalability trends across configurations.
+	In order to improve scalability analysis and productivity over the vast spectrum of possible configurations, the proposed tool features automatic instrumentation, direct mapping of parallel regions, accuracy-preserving data reductions, and ease of use.
+	As it aims at accurately understanding scalability trends of parallel applications, detailed single-run performance analyses show minimal intrusion (less than 1\% overhead).
 	
 	\include{pascalanalyzer/pascalanalyzer}
 	\include{fingerprint/fingerprint}
-	
-	This chapter will describe all the experiments that validate the models constraints.
 	\include{framework/validation}
 	
 	\chapter{Application energy and performance models} \label{chapter:models}
-	In this chapter, the proposed power, performance and energy models are derived and validated.
-	Energy consumption is crucial in high-performance computing (HPC), especially to enable the next exascale generation. Hence, modern systems implement various hardware and software features for power management. Nonetheless, due to numerous different implementations, we can always push the limits of software to achieve the most efficient use of our hardware. To be
-	energy efficient, the software relies on dynamic voltage and frequency scaling (DVFS), as well as dynamic power management (DPM). Yet, none have privileged information on the hardware architecture and application behavior, which may lead to energy-inefficient software operation. 
-	This study  proposes analytical modeling for architecture and application behavior that can be used to estimate energy-optimal software configurations and provide knowledgeable hints to improve DVFS and DPM techniques for single-node HPC applications.
+	Energy consumption is crucial in high-performance computing (HPC), especially to enable the next exascale generation. Hence, modern systems implement various hardware and software features for power management. Nonetheless, due to numerous different implementations, we can always push the limits of software to achieve the most efficient use of our hardware. To be energy efficient, the software relies on dynamic voltage and frequency scaling (DVFS), as well as dynamic power management (DPM). Yet, none have privileged information on the hardware architecture and application behavior, which may lead to energy-inefficient software operation. 
+	This chapter proposes analytical modeling for architecture and application behavior that can be used to estimate energy-optimal software configurations and provide knowledgeable hints to improve DVFS and DPM techniques for single-node HPC applications.
 	Additionally, model parameters, such as the level of parallelism and dynamic power, provide insights into how the modeled application consumes energy, which can be helpful for energy-efficient software development and operation.
 	This novel analytical model takes the number of active cores, the operating frequencies, and the input size as inputs to provide energy consumption estimation.
-	We present the modeling of 13 parallel applications employed to determine energy-optimal configurations for several different input sizes.
+	In this chapter we present the modeling of 13 parallel applications employed to determine energy-optimal configurations for several different input sizes.
 	The results show that up to 70\% of energy could be saved in the best scenario compared to the default Linux choice and 14\% on average.
 	We also compare the proposed model with standard machine-learning modeling concerning training overhead and accuracy. The results show that our approach generates about 10 times less energy overhead for the same level of accuracy.
 	\include{models/models}
 	%\include{optmizers/optmizers}
-	
-	%\chapter{Energy optimization using the models*}
 	\include{optmization/optmization}
 	
-	\chapter{Application-phase energy and performance models}
-	Dynamic voltage and frequency scaling (DVFS) and dynamic power management (DPM) are essential software techniques for saving energy in modern computers. These techniques control hardware resources such as frequency and number of active processors. Although there is much work on the subject, there is an underexplored sub-topic: the impact of the choice of phase division on energy consumption. This work analyzes the impact of phase division on the energy efficiency of algorithms by proposing a methodology that combines measurement data with a heuristic to provide insights into choosing the best phase divisions. Our heuristic can reduce the scan space from $10^{7000}$ to $10^2$ with an average error of 10\% and up to 38\% reduction in energy consumption using optimal split compared to standard Linux DVFS. In addition, we evaluated the trade-off of having too many divisions and the overhead caused. Finally, we have identified that there is usually a limit to the number of phases the algorithm can benefit from, giving a lower limit to the minimum number of phases.
+	\chapter{Application-phase heuristic energy optimization} \label{chapter:phases}
+	Dynamic voltage and frequency scaling (DVFS) and dynamic power management (DPM) are essential techniques for saving energy in modern computers. These techniques control hardware resources such as frequency and number of active processors. Although there is much work on the subject, there is an underexplored sub-topic: the impact of the choice of phase division on energy consumption.
+	This chapter analyzes the impact of phase division on the energy efficiency of algorithms and proposes a methodology that combines measurement data with a heuristic to provide insights into choosing the best phase divisions.
+	Our heuristic can reduce the scan space from $10^{7000}$ to $10^2$ with an average error of 10\% and up to 38\% reduction in energy consumption using optimal distribution compared to standard Linux DVFS. Moreover, we evaluated the trade-off of having too many divisions and the overhead caused. Finally, we have identified that there is usually a limit to the number of phases a running application can benefit from, giving a lower limit to the minimum number of phases.
 	\include{phases/phases}
 	
 	
-	\chapter{Conclusions}
-	This chapter will...
+	\chapter{Conclusions and future work*} \label{chapter:conclusions}
+	In this chapter, we deal with the conclusions about the effectiveness of the frameworks and the advantages and disadvantages of using models and algorithms with additional information on applications and architectures for energy optimization.
+	We also discussed what could be improved in each approach and framework.
 	\include{conclusion}
 	
 	%\bibliographystyle{plain}

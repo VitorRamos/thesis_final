@@ -1,4 +1,51 @@
 
+\section{Introduction to models} \label{sec:models_introduction}
+
+Although much work has been done on DVFS, the focus is still on the consumer electronics and laptop markets. 
+For HPC, the notion of energy perception is relatively new~\cite{Feng2003MakingSupercomputing}. 
+Moreover, the operational characteristics of non-HPC and HPC systems are significantly different. 
+First, the workload on non-HPC systems is very interactive with the end-user, but the workload on the HPC platform is not.
+Second, activities conducted on a non-HPC platform tend to share more machine resources.
+In contrast, in HPC, each job often runs with dedicated resources. 
+Third, an HPC system is usually much larger than a non-HPC system, making it more challenging to gather information, organize, and execute global decisions.
+Therefore, it is worthwhile to investigate whether a DVFS scheduling algorithm, which works well for conventional computing, remains effective for HPC.
+
+The chapter \cref{chapter:models} proposes a full-system energy model based on the CPU frequency and the number of cores. The model aims to understand and optimize the energy behavior of parallel applications in HPC systems according to application parameters, such as the degree of parallelism and CPU parameters related to dynamic and static power. The proposed model differs from existing ones, including the frequency and number of cores in the same equation for estimating the energy for a specific application in a given configuration. This model can serve as a base for DVFS and DPM optimization problems, including frequency and active cores. It can also be used to analyze the contribution of each parameter (ex: level of parallelism) to energy consumption. Furthermore, the number of cores is essential in HPC since applications are designed to run on multiple cores.
+
+The proposed energy model is the product of an application-agnostic power model and an architecture-specific application performance model. The power model is based on the CMOS logic gates power draw as a function of the frequency~\cite{Sarwar1997CmosCalculation, Butzen2007LeakageGates} augmented to include the number of cores. The performance model is based on Amdahl's law \cite{Amdahl1967ValidityCapabilities, Eyerman2010ModelingDesign, Gustafson1988ReevaluatingLaw}, which can be used to estimate runtime in multi-core systems. In addition, this model has been extended to include execution frequency and input size, characterizing the application on the target architecture.
+
+
+\cref{tab:related_work} summarizes the models comparing the system dependencies and the controllable variables.
+\begin{table}[H]
+	\footnotesize
+	\caption{Related work summary.\label{tab1}}
+	\setlength{\tabcolsep}{2.3mm}\begin{tabular}{cccc}
+		\toprule
+		%\begin{adjustwidth}{-\extralength}{0 cm}
+		
+		\textbf{Model}  & \textbf{System Dependency}       & \textbf{Variable}                     & \textbf{Controllable Variables}         \\ \midrule
+		Merkel et al. \cite{Merkel2006BalancingSystems} & performance counters    & number of activities & - \\
+		Roy et al. \cite{Roy2013AnAlgorithms}&performance counters &io operations, total time    & - \\
+		Yakun et al. \cite{Shao2013EnergyProcessor}&number of instructions &frequency&frequency \\
+		Lewis et al. \cite{Lewis2008Run-timeSystems}&energy of subcomponents&energy of subcomponents & - \\
+		Mills et al. \cite{Mills2014EnergySystems}&power of subcomponents&total time, frequency & frequency \\ 
+		Our model & - & frequency, cores, input size & frequency, cores, input size\\ \bottomrule
+	\end{tabular}
+	%\caption{Related work summary}
+	\label{tab:related_work}
+	%\bottomrule
+\end{table}
+
+The main contributions of the proposed model are:
+
+% Contribuições por capitulo...
+\begin{itemize}
+	\item Simple model: faster to fit and compute, good for DVFS and DPM optimization.
+	\item Parameters with logical meaning: helps to understand the contribution of each specific term.
+	\item Analytical analysis: several analyses can be derived from the equation.
+	\item Controllable variables: the equation is in the function of parameters that we can control directly.
+\end{itemize}
+
 \section{Theoretical background} \label{sec:theoretical_background}
 
 A model is a formal representation of a natural system. The representation of computer system models includes equations, graphical models, rules, decision trees, representative collections of examples, and neural networks. The choice of representation affects the model's accuracy, as well as its interpretability by people~\cite{Hypothesis2012EncyclopediaLearning, Roy2019ForecastingNetwork, Zhu2019PredictingLearning}. Accurate energy and power consumption models are essential for many energy efficiency schemes employed in computing equipment \cite{Rivoire2007ModelsOptimizations}, and they can have multiple uses, including the design, forecasting, and optimization of data center systems. This study focuses on analytical models that could aid energy optimization and analyses of crucial factors in the total energy draw.

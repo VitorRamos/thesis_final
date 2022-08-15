@@ -54,54 +54,23 @@ Indeed, this study investigates whether the construction of an energy consumptio
 We propose an analytical energy model for a given application in the function of the two control variables present in most HPC systems: CPU operating frequency and number of active cores. The model is composed of three application-dependent parameters and three parameters relating to the architecture of the system. The application parameters incorporate characteristics of the percentage of parallelism and the input size. The system architecture parameters include power-related and technology-dependent components, such as dynamic, static, and leakage power.
 
 \section{Objectives} \label{sec:objectives}
+This thesis aims to propose solutions that use the full potential of the systems involved, based on knowledge of the architectures and the applications, as follow:
 
+Develop a framework that helps and automates the process of modeling applications and architecture without interfering with the application.
 
-\section{Contributions*} \label{sec:contributions}
+Propose an analytical energy model for energy consumption in high-performance computing systems applications that both optimize energy consumption in these systems and perform deeper analysis using analytical equations.
 
-Although much work has been done on DVFS, the focus is still on the consumer electronics and laptop markets. 
-For HPC, the notion of energy perception is relatively new~\cite{Feng2003MakingSupercomputing}. 
-Moreover, the operational characteristics of non-HPC and HPC systems are significantly different. 
-First, the workload on non-HPC systems is very interactive with the end-user, but the workload on the HPC platform is not.
-Second, activities conducted on a non-HPC platform tend to share more machine resources.
-In contrast, in HPC, each job often runs with dedicated resources. 
-Third, an HPC system is usually much larger than a non-HPC system, making it more challenging to gather information, organize, and execute global decisions.
-Therefore, it is worthwhile to investigate whether a DVFS scheduling algorithm, which works well for conventional computing, remains effective for HPC.
+Propose an heuristic algorithm, taking into account changes in the behavior of applications and the systems they run.
 
-Our paper proposes a full-system energy model based on the CPU frequency and the number of cores. The model aims to understand and optimize the energy behavior of parallel applications in HPC systems according to application parameters, such as the degree of parallelism and CPU parameters related to dynamic and static power. The proposed model differs from existing ones, including the frequency and number of cores in the same equation for estimating the energy for a specific application in a given configuration. This model can serve as a base for considering DVFS and DPM optimization problems, including frequency and active cores. It can also be used to analyze the contribution of each parameter (ex: level of parallelism) to energy consumption. Furthermore, the number of cores is essential in HPC since applications are designed to run on multiple cores.
+\section{Contributions} \label{sec:contributions}
 
-The proposed energy model is the product of an application-agnostic power model and an architecture-specific application performance model. The power model is based on the CMOS logic gates power draw as a function of the frequency~\cite{Sarwar1997CmosCalculation, Butzen2007LeakageGates} augmented to include the number of cores. The performance model is based on Amdahl's law \cite{Amdahl1967ValidityCapabilities, Eyerman2010ModelingDesign, Gustafson1988ReevaluatingLaw}, which can be used to estimate runtime in multi-core systems. In addition, this model has been extended to include execution frequency and input size, characterizing the application on the target architecture.
+In the \cref{chapter:pascal_suite}, we present a tool for automatically measuring and comparing several executions of a parallel application according to various scenarios characterized by the input arrangements, the number of threads, number of cores, and frequencies. Unlike other existing performance analysis tools, the proposed work covers some gaps in specialized features necessary to better understand computational resources scalability trends across configurations while keeping minimal intrusion (less than 1\% overhead).
 
+The \cref{chapter:models}, proposes a full-system energy model based on the CPU frequency and the number of cores. The model aims to understand and optimize the energy behavior of parallel applications in HPC systems according to application parameters, such as the degree of parallelism and CPU parameters related to dynamic and static power. The proposed model differs from existing ones, including the frequency and number of cores in the same equation for estimating the energy for a specific application in a given configuration. This model can serve as a base for DVFS and DPM optimization problems. Including frequency and active cores it can also be used to analyze the contribution of each parameter (ex: level of parallelism) to energy consumption.
 
-\cref{tab:related_work} summarizes the models comparing the system dependencies and the controllable variables.
-\begin{table}[H]
-	\footnotesize
-	\caption{Related work summary.\label{tab1}}
-	\setlength{\tabcolsep}{2.3mm}\begin{tabular}{cccc}
-		\toprule
-		%\begin{adjustwidth}{-\extralength}{0 cm}
-		
-		\textbf{Model}  & \textbf{System Dependency}       & \textbf{Variable}                     & \textbf{Controllable Variables}         \\ \midrule
-		Merkel et al. \cite{Merkel2006BalancingSystems} & performance counters    & number of activities & - \\
-		Roy et al. \cite{Roy2013AnAlgorithms}&performance counters &io operations, total time    & - \\
-		Yakun et al. \cite{Shao2013EnergyProcessor}&number of instructions &frequency&frequency \\
-		Lewis et al. \cite{Lewis2008Run-timeSystems}&energy of subcomponents&energy of subcomponents & - \\
-		Mills et al. \cite{Mills2014EnergySystems}&power of subcomponents&total time, frequency & frequency \\ 
-		Our model & - & frequency, cores, input size & frequency, cores, input size\\ \bottomrule
-	\end{tabular}
-	%\caption{Related work summary}
-	\label{tab:related_work}
-	%\bottomrule
-\end{table}
+\cref{chapter:phases} proposes a methodology that combines measurement data with a heuristic to provide insights into choosing the best phase divisions. Our heuristic can reduce the scan space from $10^{7000}$ to $10^2$ with an average error of 10\% and up to 38\% reduction in energy consumption using optimal distribution compared to standard Linux DVFS. Moreover, we evaluated the trade-off of having too many divisions and the overhead caused. Finally, we have identified that there is usually a limit to the number of phases a running application can benefit from, giving a lower limit to the minimum number of phases.
 
-The main contributions of the proposed model are:
-
-
-% Contribuições por capitulo...
-\begin{itemize}
-	\item Simple model: faster to fit and compute, good for DVFS and DPM optimization.
-	\item Parameters with logical meaning: helps to understand the contribution of each specific term.
-	\item Analytical analysis: several analyses can be derived from the equation.
-	\item Controllable variables: the equation is in the function of parameters that we can control directly.
-\end{itemize}
 
 \section{Organization}
+
+In the \cref{chapter:theoretical_background} points that are common to the whole thesis are clarified, such as definitions, configurations and benchmarks used. In the next chapter \cref{chapter:pascal_suite} the PascalSuite framework is presented in detail and validated. The energy model is proposed in sequence in \cref{chapter:models}. Finally a heuristic algorithm is presented in \cref{chapter:phases} followed by the conclusion taken from this thesis in \cref{chapter:conclusions}.
