@@ -1,29 +1,21 @@
 \section{Conclusion} 
 
+This thesis presents a complete way to model HPC applications. With a low overhead framework to collect the data, an analytical model of energy consumption and a heuristic algorithm for multi-phase applications. Each of the methods presented has possible improvements that will be discussed below.
+
+
 \subsection{Pascal Suite} \label{sec:conclusions_pascal}
 
-This work introduces a practical and easy-to-use tool for measuring and analyzing the efficiency of parallel applications. The proposed tool focuses on observing scalability and energy consumption and implements features that enables analysis at hierarchical levels of the program's inner parts. It also simplifies the comparison of the application runs in different configurations, helping developers target software optimization efforts.
+The Pascal Suite framework introduces a practical and easy-to-use tools for measuring and analyzing the efficiency of parallel applications. The proposed tool focuses on observing energy consumption and scalability and implements features that enables analysis at hierarchical levels of the program's inner parts. It also simplifies the comparison of the application runs in different configurations, helping developers target software optimization efforts.
 
-The tool has a low level of intrusion added to the program's performance measurement under analysis, which is a fundamental aspect of understanding the program's behavior and scalability capacity. 
-Although it does not offer graphic elements to visualize the collected metrics, the tool itself makes it possible to examine the data from the command terminal. It also allows this data to be analyzed by an interface provided in Python or through .json files. 
+The tool has a low level of intrusion added to the program's performance measurement under analysis, which is a fundamental aspect of understanding the program's behavior.
 
-\textls[-20]{In future work, we intend to evolve this tool to include the ability to predict speedup and efficiency from a few samples using state-of-the-art prediction models present in the \mbox{literature \cite{Alex2020WhenParallelSpeedups, Vitor2022AnalyticalEnergyModel}}. The idea is to present the general behavior of the program and its scalability trend and reduce the execution time necessary to compose a comprehensive analysis. Furthermore, we intend to include features that allow the observation of parallel applications in distributed environments that use the Message Passing Interface (MPI) standard.}
+From the results, we observe that the fingerprint module API present overhead similar or lower to other low-level APIs, with the advantage of being in high abstraction and simplified configuration with a few lines of code, is possible to configure and gather performance counter data.
 
-\subsubsection{fingerprint tool}
+The fingerprint module developed provide also provided a way to compute similarities between different programs or the same program with different inputs. This can be useful to reduce applications spaces for benchmarks as was done in Polybench clustering but also to analyze the behavior of a parameter providing insights to the programmer to find a possible bottleneck.
 
-From the results, we observe that the API present overhead similar or lower to other low-level APIs, with the advantage of being in high abstraction and simplified configuration with a few lines of code, is possible to configure and gather counter data.
+\textls[-20]{In future work, we intend to evolve this tool to include the ability to predict speedup and efficiency from a few samples using state-of-the-art prediction models present in the \mbox{literature \cite{Alex2020WhenParallelSpeedups, Vitor2022AnalyticalEnergyModel}}. The idea is to present the general behavior of the program and reduce the execution time necessary to compose a comprehensive analysis. Furthermore, we intend to include features that allow the observation of parallel applications in distributed environments that use the Message Passing Interface (MPI) standard.}
 
-The tool developed provide also provided a way to fingerprint programs and compute similarities between different programs or the same program with different inputs. This can be useful to reduce applications spaces for benchmarks as was done in Polybench clustering but also to analyze the behavior of a parameter providing insights to the programmer to find a possible bottleneck.
-
-We also provide a precise definition to input size that made possible fingerprint the programs, but it also can help programmers of benchmark applications to better create inputs with more precise growth of a particular parameter.
-
-\subsection{Application model} \label{sec:conclusion_models}
-The proposed energy model based on the operating frequency and the number of cores for a shared memory system can serve as a reference for DVFS and DPM optimization problems.
-
-Results from three different HPC benchmarks demonstrate the potential of the proposed model while consuming 10 times less energy than a machine learning approach, such as SVR, to characterize applications. Moreover, it can provide knowledge-based hints to improve DVFS and DPM algorithms by enabling analysis of the contribution of each model parameter (e.g., level of parallelism) to the energy consumption. Indeed, as shown in Section \ref{sec:model_validation}, when no oracle is available to choose the frequency and the number of cores the application should use, the proposed model can save around 12\% of energy for a random choice and up to 70\% for the worse possible choice. Considering the job history of our own HPC center, which shows the prevalence of worse possible choices made by users, the potential energy savings are very significant and encourage further research.
-
-Although the model is promising, it still has some limitations. The main one is related to the input size, which needs to be estimated to create the application model and optimize the application. Another limitation concerns the power model, which does not consider the load variation, so our model ends up using an average of the energy consumption, which is enough to obtain good results but limits its implementation in real-time optimization.
-Future research is intended to solve both problems, first adapting the model to use the ratio of executed instructions as input size, something which is more tangible and easy to measure in modern systems without much overhead, and adding  new parameters to the power model to account for the load. This would allow us to develop more advanced DVFS models that could identify different phases of a target program with more subtle changes in frequency, and, perhaps, in the number of active cores to  further improve the results presented here.
+\subsection{Application-energy model} \label{sec:conclusion_models}
 
 The proposed energy model based on the frequency and number of cores for a full shared memory system can serve as a base for DVFS and DPM optimization problems that include both frequency and active cores. As well for analysis of the contribution of each parameter (ex: parallelism level) to the energy consumption.
 
@@ -31,12 +23,12 @@ Results from 3 HPC benchmarks running in one cluster demonstrate the potential o
 
 A weakness of the proposed model is the need for information about the input size of the application that can be complex to derive. A possible solution would be to precisely define what is input size, given an definition in function of common variable for all applications like throughput for example. Future work will demonstrate all the possible analysis that is possible to archive with the equation as long as more advanced DVFS models that can be derived using the equation. For instance identification of different phases of the target program and thus, it will enable more fine-grained changes of the frequency and, perhaps, the number of active cores, to further improve the results presented here.
 
-Another important aspect that is typically not taken into account is the number of processing cores to be used by a parallel program. This choice is left to the user, which often is not trivial as shown in this paper.
+Another important aspect that is typically not taken into account is the number of processing cores to be used by a parallel program. This choice is left to the user, which often is not trivial as shown in this thesis.
 
-
-\subsection{Application-phase heuristic} \label{sec:phases_conclusion}
+\subsection{Application-phase heuristic algorithm} \label{sec:phases_conclusion}
 The main conclusion of this work was that in the HPC environment, in addition to the advantages of finding the optimal phase divisions, not many phases are needed to achieve the optimal energy consumption. Moreover, an average maximum of 35 phases was sufficient for the three benchmarks used, covering the most varied HPC applications.
 It was also possible to notice that there is still a lot to improve in optimizing the DVFS algorithms since we obtained an average of 38\% energy savings compared to Ondemand on Linux.
 We also noticed that there is a relation between the application behavior and the phases locations, independently of their number.
 
 For future work, the final idea is to use the information from the best phase to find a performance metric that can provide us with this division without needing data. In future work, we intend to calculate these metrics using a combination of hardware performance counters that allow real-time optimal phase division. This metric can improve current DVFS algorithms by providing them with a workload metric that can improve energy savings.
+

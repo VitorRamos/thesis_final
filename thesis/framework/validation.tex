@@ -1,4 +1,4 @@
-\section{Pascal framework validation} \label{sec:pascal_framework_validation}
+\section{Pascal Analyzer validation} \label{sec:pascal_framework_validation}
 In this Section, we discuss the measurements and simulation results for three distinct cases, including two real applications. We also demonstrate how external libraries and standalone visualization tools can be used to render the collected data and investigate performance aspects such as the program's scalability capacity.
 
 We used three experiments to assess the tool and demonstrate its ability to support analysis aimed at observing parallel scalability. The first includes a runtime imbalance between processing units in a specific parallel region. In this case, the objective is to present how the analyzer helps users observe the impact of the inefficiency of a code part on the whole program. The code for this experiment is presented in \cref{lst:codes_regionscomparison}. It consists of two simple parallel regions with the same functionality that divide the iterations of a loop between the available threads. The difference between the regions lies in the strategies used to manipulate the sum variable, used in the example to store the values of the calculations performed in each thread. We assume that the {\tt anyop()} function, in this case, invariably has the same runtime in all function calls.
@@ -223,7 +223,7 @@ Even if the analyzer does not display graphics natively, analysis aimed at obser
 % \caption{Efficiency for OpenMC}
 % \label{fig:efficiency_openmc_detailed}
 % \end{figure}
-\section{Fingerprint Tool validation} \label{sec:fingerprint_tool_validation}
+\section{PMC Module validation} \label{sec:fingerprint_tool_validation}
 
 In this subsection, we first show the comparison between our tool and others already established, as well as the clustering process.
 
